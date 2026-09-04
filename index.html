@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>VocaRider · 보카라이더 — 영단어 게이트 레이스</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏁</text></svg>">
+
+  <!-- Three.js Post-Processing Pipeline -->
+
+  <!-- Three.js Visual Objects (Atmospheric Sky & Lensflare) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "/node_modules/three/build/three.module.js",
+      "three/examples/jsm/": "/node_modules/three/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" crossorigin src="./bundle/index-PsOx7lqj.js"></script>
+  <link rel="modulepreload" crossorigin href="./bundle/three-DbOOk5Wd.js">
+  <link rel="stylesheet" crossorigin href="./bundle/index-Cvf-yF3U.css">
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="game-canvas"></canvas>
+
+    <!-- HUD Overlay -->
+    <div id="hud">
+      <div class="hud-top">
+        <div class="stat-box hearts-box" id="hearts-box" title="남은 하트 (오답 시 -1)">
+          <span class="stat-label">HEARTS</span>
+          <span class="stat-value hearts-value" id="hearts-val">❤️❤️❤️</span>
+        </div>
+
+        <div class="stat-box level-box" id="level-box" title="캐릭터 레벨 — 맞힌 만큼 오릅니다 (10 XP = 1레벨)">
+          <span class="stat-label">LEVEL</span>
+          <span class="stat-value level-value" id="level-val">Lv 1</span>
+        </div>
+
+        <div class="stat-box nitro-box" id="nitro-box" title="니트로 부스트 (Shift / 터치)">
+          <span class="stat-label">NITRO <span class="kbd-hint">(Shift)</span></span>
+          <div>
+            <span class="stat-value nitro-value" id="nitro-val">⚡ 0/3</span>
+            <span class="stat-sub" id="nitro-progress">다음: +5</span>
+          </div>
+        </div>
+
+        <div class="stat-box distance-box">
+          <span class="stat-label">DISTANCE</span>
+          <div><span class="stat-value" id="dist-val">0</span><span class="stat-unit">m</span></div>
+        </div>
+        
+        <div class="stat-box rank-box">
+          <span class="stat-label">COINS</span>
+          <span class="stat-value rank-highlight" id="coins-val" style="font-size: 20px;">🪙 0</span>
+        </div>
+
+        <div class="stat-box tier-box" id="tier-box">
+          <span class="stat-label">LEAGUE</span>
+          <span class="stat-value tier-badge" id="tier-badge">🥉 BRONZE</span>
+        </div>
+
+        <div class="stat-box speed-box">
+          <span class="stat-label">SPEED</span>
+          <div><span class="stat-value" id="speed-val">0</span><span class="stat-unit">km/h</span></div>
+        </div>
+
+        <button id="open-shop-btn" class="hud-icon-btn" title="🎁 스킨 상점" aria-label="스킨 상점 열기">🎁</button>
+        <button id="tts-toggle-btn" class="hud-icon-btn" title="TTS 발음 듣기 On/Off" aria-label="발음 듣기 켜기/끄기" aria-pressed="true">🔊</button>
+      </div>
+
+      <!-- 🏁 우측 사이드 슬림 세로형 버티컬 코스 바 (Right-Side Vertical Bar - 전방 시야 100% 개방!) -->
+      <div id="vertical-course-bar" class="vertical-course-bar">
+        <div class="v-finish-badge" title="결승선">🏁</div>
+        <div class="v-track-container">
+          <div class="v-track-bg">
+            <div class="v-track-fill" id="v-track-fill"></div>
+          </div>
+          <!-- 🐧 실시간 플레이어 핀 -->
+          <div class="v-player-pin" id="v-player-pin" aria-label="현재 진행 위치">🏄</div>
+          <!-- 세로 노드 컨테이너 -->
+          <div class="v-nodes-list" id="v-nodes-list"></div>
+        </div>
+        <div class="v-start-badge" title="출발점">🚩</div>
+      </div>
+
+      <!-- Live Quiz Banner (Bottom Docking) -->
+      <div id="quiz-banner" class="quiz-banner">
+        <div class="quiz-badge" id="quiz-badge">💡 NEXT WORD GATE</div>
+        <div class="quiz-question-box" id="quiz-question-box">
+          <span class="quiz-q-label" id="quiz-q-label">뜻:</span>
+          <span class="quiz-q-text" id="quiz-prompt">사과</span>
+          <button id="hud-listen-btn" class="hud-listen-btn hidden" title="발음 다시 듣기" aria-label="발음 다시 듣기">🔊 다시 듣기</button>
+        </div>
+        <div class="quiz-combo-badge" id="quiz-combo-badge">🔥 0 COMBO</div>
+        <!-- 세로 화면 전용: 다가오는 게이트의 선택지 미러 (좌→우 레인 순, 게이트 테두리색 매칭).
+             배너 **안** 둘째 줄 — 절대좌표(top:144)로 두었더니 그림 힌트로 배너가 커지면 가려졌다 (사용자 피드백 2026-09-03) -->
+        <div id="lane-choices" class="lane-choices" aria-hidden="true"></div>
+      </div>
+
+      <!-- Fever Badge (Hidden by default) -->
+      <div id="fever-banner" class="fever-banner hidden">
+        <span>🌈 FEVER MAGNET ACTIVE! 🧲</span>
+      </div>
+
+      <!-- Boost Gauge -->
+      <div class="boost-container">
+        <div class="boost-label">⚡ SPEED ACCEL</div>
+        <div class="boost-bar-bg">
+          <div class="boost-bar-fill" id="boost-fill"></div>
+        </div>
+      </div>
+
+      <!-- Speed Lines Canvas Overlay -->
+      <canvas id="speed-lines-canvas"></canvas>
+
+      <!-- Center Floating Messages (Correct, Oops, Mega Jump, etc.) -->
+      <div id="floating-msg" class="floating-msg">CORRECT! ✨</div>
+
+      <!-- Control Guides (Desktop & Mobile) -->
+      <div class="controls-guide" id="controls-guide">
+        <div class="guide-item"><span>A / D</span> 또는 <span>← / →</span> 좌우 이동 (게이트 통과)</div>
+        <div class="guide-item"><span>화면 드래그</span> 조이스틱 조향 (하단 아무 데나)</div>
+        <div class="guide-item"><span>SPACE</span> 점프</div>
+        <div class="guide-item"><span>SHIFT</span> 니트로 (5콤보당 충전)</div>
+      </div>
+
+      <!-- Mobile Touch Controls -->
+      <div class="mobile-touch-zones" id="touch-zones">
+        <div class="touch-zone" left id="touch-left">◀ 좌측</div>
+        <div class="touch-zone" jump id="touch-jump">▲ 점프</div>
+        <button class="item-chip" id="item-chip" style="display:none" aria-label="보유 아이템 설명 보기"></button>
+        <div class="touch-zone nitro" id="touch-nitro">⚡ 니트로</div>
+        <div class="touch-zone" right id="touch-right">우측 ▶</div>
+      </div>
+
+      <!-- 🕹️ 플로팅 세미 조이스틱 시각화 — 하단 1/3 터치 지점에 생성 (입력 로직은 main.js) -->
+      <div id="steer-stick" class="steer-stick" aria-hidden="true">
+        <div class="steer-stick-knob" id="steer-stick-knob">◀▶</div>
+      </div>
+
+      <!-- 📱 자이로 영점 캘리브레이션 — 레이스 시작 1.2초 수평계 구슬 (main.js) -->
+      <div id="gyro-calib" class="gyro-calib hidden" aria-hidden="true">
+        <div class="gyro-calib-text">📱 폰을 편하게 잡아 주세요</div>
+        <div class="gyro-calib-bar"><div class="gyro-calib-ball" id="gyro-calib-ball"></div></div>
+      </div>
+
+      <!-- 📱 틸트 게이지 — 자이로 모드 주행 중 조향량 표시, 탭하면 중립 재설정 -->
+      <button id="gyro-gauge" class="gyro-gauge hidden" aria-label="기울기 게이지 — 탭하면 중립 재설정">
+        <div class="gyro-gauge-dot" id="gyro-gauge-dot"></div>
+      </button>
+    </div>
+
+    <!-- Start & Setup Screen -->
+    <div id="overlay-screen" class="overlay-screen">
+
+      <!-- 🏎️ 3D 인터랙티브 쇼룸 로비 HUD (모던 글래스모피즘 & 1-Tap 즉시 주행) -->
+      <div id="lobby-hud" class="lobby-hud">
+        <!-- 상단 헤더: 로고/프로필 + 트로피/코인 -->
+        <div class="lobby-header" id="lobby-header">
+          <div class="lobby-profile">
+            <img src="./bundle/logo_mark-BNmPiDi9.png" alt="Logo" class="lobby-logo-mini">
+            <div class="lobby-user-info">
+              <span class="lobby-title-text">🏁 VocaRider</span>
+              <span class="lobby-subtitle-text" id="lobby-active-summary">사막 월드 · 초등 영단어</span>
+            </div>
+          </div>
+          <div class="lobby-currency-bar">
+            <span class="lobby-stat-badge trophy-badge" id="lobby-trophy-badge">🏆 <b id="lobby-trophy-val">0</b></span>
+            <span class="lobby-stat-badge coin-badge" id="lobby-coin-badge">🪙 <b id="lobby-coin-val">0</b></span>
+          </div>
+        </div>
+
+        <!-- 3D 뷰포트 중앙 힌트 (차량 회전 안내) -->
+        <div class="lobby-center-hint" id="lobby-center-hint">
+          <span>🔄 스와이프하여 차량 360° 둘러보기</span>
+        </div>
+
+        <!-- 우측 하단 1-Tap 즉시 주행 메가 액션 존 -->
+        <div class="lobby-action-zone" id="lobby-action-zone">
+          <div class="lobby-preset-chip" id="lobby-preset-chip">
+            <span class="chip-label">NEXT TRACK</span>
+            <span class="chip-val" id="lobby-preset-val">🏜️ 사막 월드 · 🎒 초등 150</span>
+          </div>
+          <button id="lobby-instant-start-btn" class="lobby-instant-start-btn" aria-label="레이스 시작">
+            <span class="start-btn-glow"></span>
+            <span class="start-btn-icon">🚀</span>
+            <span class="start-btn-text">START RACE</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 🗺️ 월드맵 (§05 B5) — 노드 내용은 renderWorldMap() 이 실제 기록으로 채운다 -->
+      <div id="world-map-pane" class="card map-card hidden">
+        <div class="setup-head">
+          <button id="map-to-lobby-btn" class="close-btn" title="로비로 돌아가기" aria-label="로비로 돌아가기">←</button>
+          <div class="setup-head-text">
+            <h2>🗺️ 모험 월드맵</h2>
+            <p class="subtitle">10개 세계를 질주하며 별을 모으세요</p>
+          </div>
+        </div>
+
+        <div class="map-status">
+          <span class="map-stat" id="map-trophy-stat">🏆 0</span>
+          <span class="map-stat" id="map-coin-stat">🪙 0</span>
+          <button id="open-shop-start-btn" class="btn secondary-btn map-shop-btn">🎁 상점</button>
+        </div>
+
+        <div class="world-map-viewport">
+        <div class="world-map" id="world-map">
+          <button class="theme-btn world-node active" data-theme="farm" data-world="1"></button>
+          <button class="theme-btn world-node" data-theme="park" data-world="2"></button>
+          <button class="theme-btn world-node" data-theme="milkyway" data-world="3"></button>
+          <button class="theme-btn world-node" data-theme="bridge" data-world="4"></button>
+          <button class="theme-btn world-node" data-theme="nyc" data-world="5"></button>
+          <button class="theme-btn world-node" data-theme="aquarium" data-world="6"></button>
+          <button class="theme-btn world-node" data-theme="france" data-world="7"></button>
+          <button class="theme-btn world-node" data-theme="seoul" data-world="8"></button>
+          <button class="theme-btn world-node" data-theme="egypt" data-world="9"></button>
+          <button class="theme-btn world-node" data-theme="kenya" data-world="10"></button>
+        </div>
+        </div>
+
+        <p class="map-hint" id="map-hint"></p>
+
+        <!-- ⚡ 1-Tap 즉시 질주 바텀 바 -->
+        <div id="fast-launch-bar" class="fast-launch-bar hidden">
+          <div class="fast-launch-info">
+            <span class="fast-launch-track" id="fast-launch-track">🏔️ 알프스 공원</span>
+            <span class="fast-launch-preset" id="fast-launch-preset">내 프리셋: 🐕 강아지 · 🚶 표준 · 🎒 초등 영단어</span>
+          </div>
+          <div class="fast-launch-buttons">
+            <button id="fast-launch-btn" class="btn primary-btn fast-btn">⚡ 1-Tap 바로 달리기</button>
+            <button id="fast-launch-setup-btn" class="ghost-btn">⚙️ 세부 설정</button>
+            <button id="fast-launch-close-btn" class="fast-launch-close-btn" title="닫기" aria-label="닫기">✕</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⚡ 빠른 시작 픽커 (D-039 시작 흐름 P1) — 목록은 renderQuickstart() 가
+           CONTENT_REGISTRY 로 채운다. 첫 실행은 이 화면부터 (콘텐츠 먼저) -->
+      <div id="quickstart-pane" class="card setup-card hidden">
+        <div class="setup-head">
+          <button id="quickstart-close-btn" class="close-btn" title="월드맵으로" aria-label="월드맵으로 돌아가기">←</button>
+          <div class="setup-head-text">
+            <h2>⚡ 무엇을 배울까요?</h2>
+            <p class="subtitle">고르면 바로 달립니다 — 캐릭터·맵은 나중에 언제든</p>
+          </div>
+        </div>
+        <div id="quickstart-groups"></div>
+        <p class="setup-hint">일어·중국어 등 더 많은 과목을 준비하고 있어요. 스테이지를 깨며 진행하는 모험 모드는 🗺️ 월드맵에서.</p>
+      </div>
+
+      <!-- 🔍 진단 '내 수준 찾기' (시작 흐름 P3) — 비차단·시간 무제한·결과 미저장 (main.js) -->
+      <div id="diagnostic-pane" class="card setup-card hidden">
+        <div class="setup-head">
+          <button id="diag-close-btn" class="close-btn" title="빠른 시작으로" aria-label="빠른 시작으로 돌아가기">←</button>
+          <div class="setup-head-text">
+            <h2>🔍 내 수준 찾기</h2>
+            <p class="subtitle">시간 제한 없어요 — 편하게 고르세요 <span id="diag-progress"></span></p>
+          </div>
+        </div>
+        <div class="diag-word" id="diag-word"></div>
+        <div class="diag-choices" id="diag-choices"></div>
+        <div class="diag-result hidden" id="diag-result"></div>
+      </div>
+
+      <!-- 🏁 레이스 설정 — 월드를 고른 뒤에만 보인다 -->
+      <!-- 🗺️ 스테이지 노드 패널 (사가 맵 M2 — 임시 도형 단계) -->
+      <div id="stage-pane" class="card setup-card hidden">
+        <div class="stage-head">
+          <button id="stage-back-btn" class="ghost-btn">← 월드맵</button>
+          <div class="stage-title">
+            <span id="stage-world-name">월드</span>
+            <span id="stage-progress" class="stage-progress"></span>
+          </div>
+        </div>
+        <div id="stage-nodes" class="stage-nodes"></div>
+        <button id="stage-free-btn" class="ghost-btn stage-free">🏁 자유 주행 (단어장 직접 선택)</button>
+      </div>
+
+      <div id="race-setup-pane" class="card setup-card hidden">
+        <div class="setup-head">
+          <button id="back-to-map-btn" class="close-btn" title="월드맵으로" aria-label="월드맵으로 돌아가기">←</button>
+          <div class="setup-head-text">
+            <h2 id="setup-world-name">월드</h2>
+            <p class="subtitle" id="setup-world-record"></p>
+          </div>
+        </div>
+
+        <!-- 함께 달릴 친구 — 보유 캐릭터에서만 (router 동적 생성. 새 친구는 상점) -->
+        <div class="setup-section">
+          <label class="section-title">🏄 함께 달릴 친구 <span style="font-weight:400;font-size:11px;color:#8aa0c8">— 새 친구는 🎁 상점에서</span></label>
+          <div class="char-grid" id="char-grid"></div>
+        </div>
+
+        <!-- Wordset Selection Section -->
+        <div class="setup-section" id="wordset-section">
+          <label class="section-title">📚 학습 단어장 선택</label>
+          <div class="wordset-grid">
+            <button class="wordset-btn active" data-wordset="hybrid">
+              <span class="ws-icon">✨</span>
+              <div class="ws-info">
+                <span class="ws-name">그림 ↔ 뜻 교차 모드</span>
+                <span class="ws-desc">Apple ➔ 🍎사과 + 단어뜻 번갈아 출제!</span>
+              </div>
+            </button>
+            <button class="wordset-btn" data-wordset="elementary">
+              <span class="ws-icon">🎒</span>
+              <div class="ws-info">
+                <span class="ws-name">초등 필수 영단어 150</span>
+                <span class="ws-desc">Dog, Water, School, Friend...</span>
+              </div>
+            </button>
+            <button class="wordset-btn" data-wordset="middle">
+              <span class="ws-icon">🏫</span>
+              <div class="ws-info">
+                <span class="ws-name">중고등 / 수능 필수 200</span>
+                <span class="ws-desc">Accept, Achieve, Adapt...</span>
+              </div>
+            </button>
+            <button class="wordset-btn" data-wordset="high">
+              <span class="ws-icon">📚</span>
+              <div class="ws-info">
+                <span class="ws-name">고등 심화 160</span>
+                <span class="ws-desc">Adversity, Plausible, Subtle...</span>
+              </div>
+            </button>
+            <button class="wordset-btn" data-wordset="toeic">
+              <span class="ws-icon">📝</span>
+              <div class="ws-info">
+                <span class="ws-name">토익 영단어 150</span>
+                <span class="ws-desc">Accommodate, Adhere, Merge...</span>
+              </div>
+            </button>
+            <button class="wordset-btn" data-wordset="toefl">
+              <span class="ws-icon">🎓</span>
+              <div class="ws-info">
+                <span class="ws-name">토플 영단어 150</span>
+                <span class="ws-desc">Abolish, Abundant, Coherent...</span>
+              </div>
+            </button>
+            <button class="wordset-btn" data-wordset="business">
+              <span class="ws-icon">💼</span>
+              <div class="ws-info">
+                <span class="ws-name">비즈니스 영어 100</span>
+                <span class="ws-desc">Agenda, Asset, Buy-in...</span>
+              </div>
+            </button>
+            <button class="wordset-btn" data-wordset="phrases">
+              <span class="ws-icon">💬</span>
+              <div class="ws-info">
+                <span class="ws-name">생활 회화 100</span>
+                <span class="ws-desc">How's it going? Long time no see...</span>
+              </div>
+            </button>
+            <button class="wordset-btn" data-wordset="capitals">
+              <span class="ws-icon">🌍</span>
+              <div class="ws-info">
+                <span class="ws-name">세계 수도 / 상식</span>
+                <span class="ws-desc">한국-서울, 미국-워싱턴...</span>
+              </div>
+            </button>
+            <button class="wordset-btn" data-wordset="custom">
+              <span class="ws-icon">✏️</span>
+              <div class="ws-info">
+                <span class="ws-name">직접 단어 입력</span>
+                <span class="ws-desc">나만의 단어장 붙여넣기</span>
+              </div>
+            </button>
+          </div>
+
+          <!-- Custom Words Textarea (Hidden by default) -->
+          <div id="custom-word-box" class="custom-word-box hidden">
+            <label class="custom-label">✏️ 나만의 단어 목록 (단어: 뜻 형식으로 한 줄씩 입력)</label>
+            <textarea id="custom-word-input" rows="3" placeholder="apple: 사과&#10;banana: 바나나&#10;skyscraper: 마천루&#10;penguin: 펭귄"></textarea>
+          </div>
+        </div>
+
+        <!-- 🏁 코스 길이 선택 — 스테이지 모드에선 숨긴다 (LEARN-01: 노드 단어 수가 길이를 정한다) -->
+        <div class="setup-section" id="course-length-section">
+          <label class="section-title">🏁 코스 길이 & 챌린지 문제 수 (Course Length)</label>
+          <div class="length-selector-grid">
+            <button class="length-btn" data-length="5">
+              <span class="length-icon">⚡</span>
+              <span class="length-title">5 단어 (스낵)</span>
+              <span class="length-desc">약 1,200m / 1분 완주</span>
+            </button>
+            <button class="length-btn active" data-length="10">
+              <span class="length-icon">🏆</span>
+              <span class="length-title">10 단어 (정규 추천 ⭐)</span>
+              <span class="length-desc">약 2,500m / 2분 30초</span>
+            </button>
+            <button class="length-btn" data-length="15">
+              <span class="length-icon">👑</span>
+              <span class="length-title">15 단어 (마스터)</span>
+              <span class="length-desc">약 4,000m / 4분 마라톤</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 🐢 속도 4단계 · 판단 시간 (§08 E1·E2) — 네 단계 모두 처음부터 열려 있다 -->
+        <div class="setup-section">
+          <label class="section-title">🐢 주행 속도 (언제든 바꿀 수 있습니다)</label>
+          <div class="speed-tier-grid" id="speed-tier-grid"></div>
+        </div>
+
+        <div class="setup-section">
+          <label class="section-title">🔊 소리</label>
+          <div class="sound-mode-grid">
+            <button class="sound-mode-btn active" data-sound="on">🔊 소리 켜고<span class="sound-sub">발음·듣기 문제 포함</span></button>
+            <button class="sound-mode-btn" data-sound="off">🔇 무음 플레이<span class="sound-sub">듣기 문제 없이 출제</span></button>
+          </div>
+          <p class="setup-hint">무음을 고르면 소리를 들어야 하는 문제가 나오지 않습니다. 지하철·도서관에서도 공평하게.</p>
+
+          <label class="section-title">🕹️ 조작 방식</label>
+          <div class="sound-mode-grid">
+            <button class="steer-mode-btn" data-steer="touch">🕹️ 터치 조이스틱<span class="sound-sub">화면을 누르면 스틱이 따라와요</span></button>
+            <button class="steer-mode-btn" data-steer="gyro">📱 기울기<span class="sound-sub">폰을 핸들처럼 좌우로</span></button>
+          </div>
+          <p class="setup-hint">조이스틱은 주행 중 항상 보이고, 화면 하단 어디를 눌러도 그 자리에서 조향됩니다. 좌우 버튼·키보드는 항상 함께 동작해요. 기울기는 센서가 있는 폰 전용(iOS 는 권한 요청).</p>
+
+          <label class="section-title">⏱️ 게이트 판단 시간</label>
+          <div class="gate-time-grid" id="gate-time-grid"></div>
+          <p class="setup-hint">단어를 몰라서 못 맞히는 것과 시간이 없어서 못 맞히는 것은 다릅니다. 속도와 따로 고르세요.</p>
+        </div>
+
+        <div class="setup-actions">
+          <button id="start-btn" class="btn primary-btn">START 3D HD RACE 🚀</button>
+          <button id="start-boss-btn" class="btn primary-btn boss-btn hidden">👹 보스전 — 틀린 단어 복수전</button>
+        </div>
+      </div>
+
+      <!-- 👤 MY 탭 패널 (내 차고, 보유 캐릭터/탈것 변경, 기본 플레이 프리셋) -->
+      <div id="my-pane" class="card setup-card my-card hidden">
+        <div class="setup-head">
+          <button id="my-to-lobby-btn" class="close-btn" title="로비로 돌아가기" aria-label="로비로 돌아가기">←</button>
+          <div class="setup-head-text">
+            <h2>👤 내 정보 · MY 차고</h2>
+            <p class="subtitle">보유 자산 관리 및 1-Tap 즉시 질주 기본값 설정</p>
+          </div>
+        </div>
+
+        <!-- 1. 장착 요약 히어로 카드 -->
+        <div class="my-hero-card" id="my-hero-card">
+          <div class="my-hero-visual">
+            <span class="my-hero-species-badge" id="my-hero-species-badge">🐕</span>
+            <div class="my-hero-titles">
+              <div class="my-hero-name" id="my-hero-name">강아지</div>
+              <div class="my-hero-sub" id="my-hero-sub">Lv.1 · 클래식 튜브 장착</div>
+            </div>
+          </div>
+          <div class="my-hero-stats">
+            <div class="my-stat-chip">🏆 <span id="my-trophy-display">0</span></div>
+            <div class="my-stat-chip">🪙 <span id="my-coin-display">0</span></div>
+          </div>
+        </div>
+
+        <!-- 2. 내 보유 캐릭터 (1-Tap 즉시 장착) -->
+        <div class="my-section">
+          <div class="my-section-head">
+            <span class="section-title">🏄 내 보유 캐릭터</span>
+            <span class="my-section-tag" id="my-char-count-tag">보유</span>
+          </div>
+          <p class="setup-hint">터치하면 즉시 함께 달리는 캐릭터가 변경됩니다. (새 친구는 🛍️ 상점에서)</p>
+          <div class="my-inventory-grid" id="my-char-grid"></div>
+        </div>
+
+        <!-- 3. 내 보유 탈것 (1-Tap 즉시 장착) -->
+        <div class="my-section">
+          <div class="my-section-head">
+            <span class="section-title">🏎️ 내 보유 탈것</span>
+            <span class="my-section-tag" id="my-veh-count-tag">보유</span>
+          </div>
+          <p class="setup-hint">터치하면 즉시 장착됩니다. 맨발 질주나 새로운 탈것은 🛍️ 상점에서 만나요.</p>
+          <div class="my-inventory-grid" id="my-vehicle-grid"></div>
+        </div>
+
+        <!-- 4. 기본 플레이 프리셋 (1-Tap 맵 질주에 자동 적용) -->
+        <div class="my-section my-preset-section">
+          <div class="my-section-head">
+            <span class="section-title">⚡ 기본 플레이 프리셋 (Default Preset)</span>
+            <span class="my-section-tag active-tag">1-Tap 맵 직행에 자동 적용</span>
+          </div>
+          <p class="setup-hint">원하는 속도와 과목, 수준을 미리 맞춰두면 맵 터치 한 번으로 즉시 질주합니다.</p>
+
+          <!-- 속도 프리셋 칩 -->
+          <label class="preset-label">🏎️ 주행 속도</label>
+          <div class="preset-chip-grid" id="preset-speed-grid">
+            <button class="preset-chip" data-speed="slow"><span class="chip-icon">🐢</span>저속 (45km/h)</button>
+            <button class="preset-chip active" data-speed="normal"><span class="chip-icon">🚶</span>표준 (65km/h)</button>
+            <button class="preset-chip" data-speed="fast"><span class="chip-icon">🏃</span>고속 (85km/h)</button>
+            <button class="preset-chip" data-speed="ultra"><span class="chip-icon">⚡</span>초고속 (105km/h)</button>
+          </div>
+
+          <!-- 과목 프리셋 칩 -->
+          <label class="preset-label">📚 학습 과목</label>
+          <div class="preset-chip-grid" id="preset-subject-grid">
+            <button class="preset-chip active" data-subject="english"><span class="chip-icon">🔤</span>영어</button>
+            <button class="preset-chip" data-subject="japanese"><span class="chip-icon">🌸</span>일본어</button>
+            <button class="preset-chip" data-subject="general"><span class="chip-icon">💡</span>상식</button>
+          </div>
+
+          <!-- 난이도/수준 프리셋 칩 (과목에 따라 동적 렌더링) -->
+          <label class="preset-label">🎯 학습 수준 / 단어장</label>
+          <div class="preset-chip-grid" id="preset-level-grid"></div>
+
+          <!-- 게이트 판단 시간 -->
+          <label class="preset-label">⏱️ 게이트 판단 시간</label>
+          <div class="preset-chip-grid" id="preset-gate-grid">
+            <button class="preset-chip active" data-gate="standard">표준 (0.65x)</button>
+            <button class="preset-chip" data-gate="relaxed">넉넉 (0.42x)</button>
+            <button class="preset-chip" data-gate="unlimited">무제한</button>
+          </div>
+
+          <!-- 사운드 모드 -->
+          <label class="preset-label">🔊 소리 모드</label>
+          <div class="preset-chip-grid" id="preset-sound-grid">
+            <button class="preset-chip active" data-sound="on">🔊 소리 켜기</button>
+            <button class="preset-chip" data-sound="off">🔇 무음</button>
+          </div>
+        </div>
+
+        <div class="my-footer-actions">
+          <button id="my-save-play-btn" class="btn primary-btn">🚀 이 설정으로 지금 달리기</button>
+        </div>
+      </div>
+
+      <!-- 하단 5대 내비게이션 바 (공통 셸) -->
+      <nav class="bottom-nav-bar" id="bottom-nav-bar">
+        <button class="nav-tab active" data-tab="lobby" id="nav-tab-lobby">
+          <span class="nav-icon">🏎️</span>
+          <span class="nav-label">로비</span>
+        </button>
+        <button class="nav-tab" data-tab="adventure" id="nav-tab-adventure">
+          <span class="nav-icon">🗺️</span>
+          <span class="nav-label">모험</span>
+        </button>
+        <button class="nav-tab" data-tab="vocab" id="nav-tab-vocab">
+          <span class="nav-icon">📚</span>
+          <span class="nav-label">단어장</span>
+        </button>
+        <button class="nav-tab" data-tab="shop" id="nav-tab-shop">
+          <span class="nav-icon">🛍️</span>
+          <span class="nav-label">상점</span>
+        </button>
+        <button class="nav-tab" data-tab="my" id="nav-tab-my">
+          <span class="nav-icon">👤</span>
+          <span class="nav-label">MY</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- 🎁 Skin & Vehicle Gacha Shop Modal -->
+    <div id="shop-modal" class="modal-overlay hidden">
+      <div class="card modal-card">
+        <div class="modal-header">
+          <h2>🎁 VocaRider 샵</h2>
+          <span class="shop-balance" id="shop-coin-balance">🪙 0</span>
+          <button id="close-shop-btn" class="close-btn" aria-label="상점 닫기">✕</button>
+        </div>
+        <p class="modal-sub">단어를 배워 코인을 모으고, 새 친구를 데려와 진화시키세요! 진행은 📖 도감에서.</p>
+
+        <div class="shop-tabs">
+          <button class="shop-tab active" data-tab="skins">🎽 스킨</button>
+          <button class="shop-tab" data-tab="vehicles">🏎️ 탈것</button>
+          <button class="shop-tab" data-tab="chars">🐶 새 친구</button>
+          <button class="shop-tab" data-tab="dex">📖 도감</button>
+        </div>
+
+        <!-- Character Skins Grid -->
+        <div id="shop-skins-header" class="shop-sub-header"></div>
+        <div id="shop-skins-grid" class="shop-items-grid"></div>
+
+        <!-- Vehicle Skins Grid -->
+        <div id="shop-vehicles-grid" class="shop-items-grid hidden"></div>
+
+        <!-- 🐶 수집 캐릭터 (Task 11 반입) -->
+        <div id="shop-chars-grid" class="shop-items-grid hidden"></div>
+        <!-- 📖 도감 — router 가 카탈로그에서 동적 생성 -->
+        <div id="shop-dex-grid" class="shop-items-grid hidden"></div>
+      </div>
+    </div>
+
+    <!-- 🧠 Smart 3D Review Room Modal (오답노트 & 망각곡선 복습 룸) -->
+    <div id="review-modal" class="modal-overlay hidden">
+      <div class="card modal-card review-card">
+        <div class="modal-header">
+          <h2>🧠 스마트 3D 오답 복습 룸</h2>
+          <button id="close-review-btn" class="close-btn" aria-label="복습 창 닫기">✕</button>
+        </div>
+        <p class="modal-sub">방금 레이스에서 놓친 단어를 복습하고 <strong>+50 보너스 코인🪙</strong>을 획득하세요!</p>
+        <div id="review-progress-banner" class="review-progress-banner hidden">
+          <span id="review-progress-text">재인출 0 / 3</span>
+        </div>
+
+        <div id="review-cards-container" class="review-cards-grid">
+          <!-- Dynamically populated review cards -->
+        </div>
+
+        <div class="review-footer">
+          <button id="restart-from-review-btn" class="btn primary-btn">다시 질주하기 🚀</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🎉 Victory Stage Clear Modal (별 3개 등급 & 완주 리포트) -->
+    <div id="victory-modal" class="modal-overlay hidden">
+      <div class="card modal-card victory-card">
+        <div class="victory-header">
+          <span class="victory-trophy-icon">🏆</span>
+          <h2 id="victory-title">STAGE CLEAR!</h2>
+          <p class="modal-sub" id="victory-sub">5개 단어 챌린지를 멋지게 완주했습니다!</p>
+        </div>
+
+        <!-- ⭐️⭐️⭐️ 3D Pixar Medal & Star Rating -->
+        <div class="victory-medal-box">
+          <img id="victory-medal-img" class="victory-medal-img" src="./bundle/medal_3-CjUhLWTs.png" alt="Victory Medal">
+        </div>
+        <div class="star-rating-box">
+          <span class="star-icon" id="star-1">⭐️</span>
+          <span class="star-icon" id="star-2">⭐️</span>
+          <span class="star-icon" id="star-3">⭐️</span>
+        </div>
+
+        <!-- Victory Stats -->
+        <div class="victory-stats-grid">
+          <div class="v-stat-item">
+            <span class="v-stat-label">정답률</span>
+            <span class="v-stat-value" id="v-score-val">5 / 5</span>
+          </div>
+          <div class="v-stat-item">
+            <span class="v-stat-label">완주 시간</span>
+            <span class="v-stat-value" id="v-time-val">1분 12초</span>
+          </div>
+          <div class="v-stat-item">
+            <span class="v-stat-label">획득 트로피</span>
+            <span class="v-stat-value highlight-trophy" id="v-trophy-val">+100 🏆</span>
+          </div>
+          <div class="v-stat-item">
+            <span class="v-stat-label">획득 코인</span>
+            <span class="v-stat-value highlight-coin" id="v-coin-val">+50 🪙</span>
+          </div>
+          <div class="v-stat-item">
+            <span class="v-stat-label">캐릭터 경험치</span>
+            <span class="v-stat-value" id="v-xp-val">—</span>
+          </div>
+        </div>
+
+        <div class="victory-actions">
+          <button id="victory-review-btn" class="btn secondary-btn hidden" style="background: rgba(56, 189, 248, 0.2); border-color: #38bdf8; color: #38bdf8; font-weight: 800;">🧠 오답 복습하고 3성 달성 (+50🪙)</button>
+          <button id="victory-report-btn" class="btn secondary-btn">📋 결과 보기</button>
+          <button id="victory-map-btn" class="btn secondary-btn">🗺️ 월드맵으로</button>
+          <button id="victory-next-btn" class="btn primary-btn">다음 라운드 질주 🚀</button>
+        </div>
+      </div>
+    </div><!-- /#victory-modal — 미닫힘으로 fail/report 모달이 안에 중첩되던 선재 버그 수정 (P1 실측) -->
+    <!-- 💔 Game Over / Fail Modal (하트 소진 실패 화면) -->
+    <!-- 📋 결과 브리핑 + ⭐ 내 단어장 (P1 — postrace-plan, 목록은 renderRaceReport) -->
+    <div id="report-modal" class="modal-overlay hidden">
+      <div class="card modal-card report-card">
+        <div class="report-head">
+          <h2 id="report-title">📋 완주 브리핑</h2>
+          <p id="report-sub" class="report-sub"></p>
+          <button id="report-filter-btn" class="ghost-btn report-filter-btn">틀린 단어만</button>
+        </div>
+        <div id="report-list" class="report-list"></div>
+        <button id="report-race-btn" class="btn secondary-btn hidden">🏁 이 단어들로 달리기</button>
+        <button id="report-close-btn" class="btn primary-btn">닫기</button>
+      </div>
+    </div>
+
+    <div id="fail-modal" class="modal-overlay hidden">
+      <div class="card modal-card fail-card">
+        <div class="fail-header">
+          <span class="fail-icon">💔</span>
+          <h2 id="fail-title">STAGE FAILED</h2>
+          <p class="modal-sub" id="fail-sub">하트 3개를 모두 잃었습니다. 오답 없이 정답 게이트를 통과해 보세요!</p>
+        </div>
+
+        <div class="fail-stats-grid">
+          <div class="fail-stat-item">
+            <span class="fail-stat-label">맞힌 문제 수</span>
+            <span class="fail-stat-value" id="fail-score-val">0 / 10</span>
+          </div>
+          <div class="fail-stat-item">
+            <span class="fail-stat-label">이번 판 코인</span>
+            <span class="fail-stat-value" id="fail-coin-val">—</span>
+          </div>
+          <div class="fail-stat-item">
+            <span class="fail-stat-label">캐릭터 경험치</span>
+            <span class="fail-stat-value" id="fail-xp-val">—</span>
+          </div>
+        </div>
+
+        <div class="fail-actions">
+          <button id="fail-report-btn" class="btn secondary-btn">📋 결과 보기</button>
+          <button id="fail-map-btn" class="btn secondary-btn">🗺️ 월드맵으로</button>
+          <button id="fail-retry-btn" class="btn primary-btn fail-retry-btn">🔄 무료 즉시 재도전</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- bare specifier 를 로컬 경로로 푼다. 번들러 없이 개발이 되고,
+       프로덕션은 vite build 가 묶는다 (§06 C4). -->
+  <!-- 진단 훅: 로드 시 'reading trim' TypeError 2건이 폰에서만 간헐 재현된다.
+       헤드리스 20회·저장 오염 6종·데스크톱 실프로필 모두 재현 실패 (2026-08-30).
+       다음 발생 때 스택을 남기기 위한 로그 전용 훅 — 게임 동작에는 영향 없다. -->
+  <script>
+    addEventListener('unhandledrejection', function (e) {
+      var r = e && e.reason;
+      console.error('[VocaRider 진단] unhandledrejection:', (r && r.stack) || r);
+    });
+  </script>
+
+</div><!-- /#game-container — 원래 닫히지 않아 브라우저가 암묵적으로 닫고 있었다 -->
+</body>
+</html>
