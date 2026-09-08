@@ -17,9 +17,9 @@
     }
   }
   </script>
-  <script type="module" crossorigin src="./bundle/index-4_42QFFI.js"></script>
+  <script type="module" crossorigin src="./bundle/index-BsuLfeUe.js"></script>
   <link rel="modulepreload" crossorigin href="./bundle/three-DbOOk5Wd.js">
-  <link rel="stylesheet" crossorigin href="./bundle/index-D7YtO02E.css">
+  <link rel="stylesheet" crossorigin href="./bundle/index-B2qaVolX.css">
 </head>
 <body>
   <div id="game-container">
@@ -83,6 +83,12 @@
           <div class="v-nodes-list" id="v-nodes-list"></div>
         </div>
         <div class="v-start-badge" title="출발점">🚩</div>
+      </div>
+
+      <!-- 👆 터치 레이스 카드 (TR-001 T1) — 문제는 위 배너, 답 4개는 여기서 탭. 키보드 1~4 -->
+      <div id="tap-card" class="tap-card hidden" aria-live="polite">
+        <div class="tap-card-timer"><div class="tap-card-timer-fill" id="tap-card-timer-fill"></div></div>
+        <div class="tap-card-choices" id="tap-card-choices"></div>
       </div>
 
       <!-- Live Quiz Banner (Bottom Docking) -->
@@ -404,6 +410,13 @@
               <span class="length-desc">약 4,000m / 4분 마라톤</span>
             </button>
           </div>
+        </div>
+
+        <!-- 👆 플레이 방식 (TR-001, D-063) — 게이트 레이스 / 터치 레이스. 학습 데이터 공유, 기록 버킷은 분리 -->
+        <div class="setup-section">
+          <label class="section-title">👆 플레이 방식</label>
+          <div class="play-mode-grid" id="play-mode-grid"></div>
+          <p class="setup-hint">터치 레이스는 문제가 화면 카드로 뜨고 답을 탭합니다. 빨리 맞히면 더 가속(판단 시간 모드가 기준, 무제한은 등급 없음), 틀리면 감속. 기록은 게이트 레이스와 따로 비교합니다.</p>
         </div>
 
         <!-- 🐢 속도 4단계 · 판단 시간 (§08 E1·E2) — 네 단계 모두 처음부터 열려 있다 -->
