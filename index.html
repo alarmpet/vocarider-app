@@ -17,9 +17,9 @@
     }
   }
   </script>
-  <script type="module" crossorigin src="./bundle/index-CDEg6bBW.js"></script>
+  <script type="module" crossorigin src="./bundle/index-CaEXD7Tr.js"></script>
   <link rel="modulepreload" crossorigin href="./bundle/three-DbOOk5Wd.js">
-  <link rel="stylesheet" crossorigin href="./bundle/index-CTNR5zOc.css">
+  <link rel="stylesheet" crossorigin href="./bundle/index-D7YtO02E.css">
 </head>
 <body>
   <div id="game-container">
@@ -223,6 +223,12 @@
         </div>
 
         <p class="map-hint" id="map-hint"></p>
+
+        <!-- 🏁 Tour 챌린지 — 고정 조건, 자기 최고 기록에 도전 (RT-002). 온라인 순위 아님 -->
+        <div class="tour-section" id="tour-section">
+          <div class="my-section-head"><span class="section-title">🏁 Tour 챌린지</span><span class="my-section-tag">내 최고 기록에 도전</span></div>
+          <div class="tour-cards" id="tour-cards"></div>
+        </div>
 
         <!-- ⚡ 1-Tap 즉시 질주 바텀 바 -->
         <div id="fast-launch-bar" class="fast-launch-bar hidden">
@@ -673,6 +679,9 @@
             <span class="v-stat-value" id="v-xp-val">—</span>
           </div>
         </div>
+        <!-- 🏁 Tour 결과 줄 · 📚 복습 추천 ≤3 (RT-002 5·6단계). 없으면 숨김 -->
+        <p class="setup-hint v-tour-line hidden" id="v-tour-line"></p>
+        <div class="victory-recs hidden" id="victory-review-recs"></div>
 
         <div class="victory-actions">
           <button id="victory-review-btn" class="btn secondary-btn hidden" style="background: rgba(56, 189, 248, 0.2); border-color: #38bdf8; color: #38bdf8; font-weight: 800;">🧠 오답 복습하고 3성 달성 (+50🪙)</button>
