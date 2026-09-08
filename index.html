@@ -17,9 +17,9 @@
     }
   }
   </script>
-  <script type="module" crossorigin src="./bundle/index-PsOx7lqj.js"></script>
+  <script type="module" crossorigin src="./bundle/index-BC3QkBRA.js"></script>
   <link rel="modulepreload" crossorigin href="./bundle/three-DbOOk5Wd.js">
-  <link rel="stylesheet" crossorigin href="./bundle/index-Cvf-yF3U.css">
+  <link rel="stylesheet" crossorigin href="./bundle/index-CTNR5zOc.css">
 </head>
 <body>
   <div id="game-container">
@@ -442,7 +442,7 @@
           </div>
         </div>
 
-        <!-- 1. 장착 요약 히어로 카드 -->
+        <!-- 1. 장착 요약 히어로 카드 (슬림 컴팩트) -->
         <div class="my-hero-card" id="my-hero-card">
           <div class="my-hero-visual">
             <span class="my-hero-species-badge" id="my-hero-species-badge">🐕</span>
@@ -457,68 +457,94 @@
           </div>
         </div>
 
-        <!-- 2. 내 보유 캐릭터 (1-Tap 즉시 장착) -->
-        <div class="my-section">
-          <div class="my-section-head">
-            <span class="section-title">🏄 내 보유 캐릭터</span>
-            <span class="my-section-tag" id="my-char-count-tag">보유</span>
-          </div>
-          <p class="setup-hint">터치하면 즉시 함께 달리는 캐릭터가 변경됩니다. (새 친구는 🛍️ 상점에서)</p>
-          <div class="my-inventory-grid" id="my-char-grid"></div>
+        <!-- 2. 세그먼트 서브탭 바 (캐릭터 / 탈것 / 프리셋) -->
+        <div class="my-subtab-bar" id="my-subtab-bar">
+          <button class="my-subtab-btn active" data-subtab="chars" id="my-subtab-chars-btn">
+            🏄 캐릭터 <span class="my-subtab-badge" id="my-subtab-char-count">13</span>
+          </button>
+          <button class="my-subtab-btn" data-subtab="vehs" id="my-subtab-vehs-btn">
+            🏎️ 탈것 <span class="my-subtab-badge" id="my-subtab-veh-count">12</span>
+          </button>
+          <button class="my-subtab-btn" data-subtab="presets" id="my-subtab-presets-btn">
+            ⚡ 프리셋
+          </button>
         </div>
 
-        <!-- 3. 내 보유 탈것 (1-Tap 즉시 장착) -->
-        <div class="my-section">
-          <div class="my-section-head">
-            <span class="section-title">🏎️ 내 보유 탈것</span>
-            <span class="my-section-tag" id="my-veh-count-tag">보유</span>
+        <!-- 3. 서브탭 패널: 캐릭터 (1-Tap 즉시 장착) -->
+        <div class="my-subtab-pane active" id="my-subtab-pane-chars">
+          <div class="my-section my-subtab-section">
+            <div class="my-section-head">
+              <span class="section-title">🏄 내 보유 캐릭터</span>
+              <span class="my-section-tag" id="my-char-count-tag">보유 13종</span>
+            </div>
+            <p class="setup-hint">터치하면 즉시 장착됩니다. (새 친구는 🛍️ 상점에서)</p>
+            <div class="my-inventory-grid arcade-grid" id="my-char-grid"></div>
           </div>
-          <p class="setup-hint">터치하면 즉시 장착됩니다. 맨발 질주나 새로운 탈것은 🛍️ 상점에서 만나요.</p>
-          <div class="my-inventory-grid" id="my-vehicle-grid"></div>
         </div>
 
-        <!-- 4. 기본 플레이 프리셋 (1-Tap 맵 질주에 자동 적용) -->
-        <div class="my-section my-preset-section">
-          <div class="my-section-head">
-            <span class="section-title">⚡ 기본 플레이 프리셋 (Default Preset)</span>
-            <span class="my-section-tag active-tag">1-Tap 맵 직행에 자동 적용</span>
+        <!-- 4. 서브탭 패널: 탈것 (1-Tap 즉시 장착) -->
+        <div class="my-subtab-pane hidden" id="my-subtab-pane-vehs">
+          <div class="my-section my-subtab-section">
+            <div class="my-section-head">
+              <span class="section-title">🏎️ 내 보유 탈것</span>
+              <span class="my-section-tag" id="my-veh-count-tag">보유 12종</span>
+            </div>
+            <p class="setup-hint">터치하면 즉시 장착됩니다. 맨발 질주나 새 탈것은 🛍️ 상점에서 만나요.</p>
+            <div class="my-inventory-grid arcade-grid" id="my-vehicle-grid"></div>
           </div>
-          <p class="setup-hint">원하는 속도와 과목, 수준을 미리 맞춰두면 맵 터치 한 번으로 즉시 질주합니다.</p>
+        </div>
 
-          <!-- 속도 프리셋 칩 -->
-          <label class="preset-label">🏎️ 주행 속도</label>
-          <div class="preset-chip-grid" id="preset-speed-grid">
-            <button class="preset-chip" data-speed="slow"><span class="chip-icon">🐢</span>저속 (45km/h)</button>
-            <button class="preset-chip active" data-speed="normal"><span class="chip-icon">🚶</span>표준 (65km/h)</button>
-            <button class="preset-chip" data-speed="fast"><span class="chip-icon">🏃</span>고속 (85km/h)</button>
-            <button class="preset-chip" data-speed="ultra"><span class="chip-icon">⚡</span>초고속 (105km/h)</button>
-          </div>
+        <!-- 5. 서브탭 패널: 기본 플레이 프리셋 -->
+        <div class="my-subtab-pane hidden" id="my-subtab-pane-presets">
+          <div class="my-section my-preset-section">
+            <div class="my-section-head">
+              <span class="section-title">⚡ 기본 플레이 프리셋 (Default Preset)</span>
+              <span class="my-section-tag active-tag">1-Tap 맵 직행에 자동 적용</span>
+            </div>
+            <p class="setup-hint">원하는 속도와 과목, 수준을 미리 맞춰두면 맵 터치 한 번으로 즉시 질주합니다.</p>
 
-          <!-- 과목 프리셋 칩 -->
-          <label class="preset-label">📚 학습 과목</label>
-          <div class="preset-chip-grid" id="preset-subject-grid">
-            <button class="preset-chip active" data-subject="english"><span class="chip-icon">🔤</span>영어</button>
-            <button class="preset-chip" data-subject="japanese"><span class="chip-icon">🌸</span>일본어</button>
-            <button class="preset-chip" data-subject="general"><span class="chip-icon">💡</span>상식</button>
-          </div>
+            <!-- 속도 프리셋 칩 -->
+            <label class="preset-label">🏎️ 주행 속도</label>
+            <div class="preset-chip-grid" id="preset-speed-grid">
+              <button class="preset-chip" data-speed="slow"><span class="chip-icon">🐢</span>저속 (45km/h)</button>
+              <button class="preset-chip active" data-speed="normal"><span class="chip-icon">🚶</span>표준 (65km/h)</button>
+              <button class="preset-chip" data-speed="fast"><span class="chip-icon">🏃</span>고속 (85km/h)</button>
+              <button class="preset-chip" data-speed="ultra"><span class="chip-icon">⚡</span>초고속 (105km/h)</button>
+            </div>
 
-          <!-- 난이도/수준 프리셋 칩 (과목에 따라 동적 렌더링) -->
-          <label class="preset-label">🎯 학습 수준 / 단어장</label>
-          <div class="preset-chip-grid" id="preset-level-grid"></div>
+            <!-- 과목 프리셋 칩 -->
+            <label class="preset-label">📚 학습 과목</label>
+            <div class="preset-chip-grid" id="preset-subject-grid">
+              <button class="preset-chip active" data-subject="english"><span class="chip-icon">🔤</span>영어</button>
+              <button class="preset-chip" data-subject="japanese"><span class="chip-icon">🌸</span>일본어</button>
+              <button class="preset-chip" data-subject="general"><span class="chip-icon">💡</span>상식</button>
+            </div>
 
-          <!-- 게이트 판단 시간 -->
-          <label class="preset-label">⏱️ 게이트 판단 시간</label>
-          <div class="preset-chip-grid" id="preset-gate-grid">
-            <button class="preset-chip active" data-gate="standard">표준 (0.65x)</button>
-            <button class="preset-chip" data-gate="relaxed">넉넉 (0.42x)</button>
-            <button class="preset-chip" data-gate="unlimited">무제한</button>
-          </div>
+            <!-- 난이도/수준 프리셋 칩 (과목에 따라 동적 렌더링) -->
+            <label class="preset-label">🎯 학습 수준 / 단어장</label>
+            <div class="preset-chip-grid" id="preset-level-grid"></div>
 
-          <!-- 사운드 모드 -->
-          <label class="preset-label">🔊 소리 모드</label>
-          <div class="preset-chip-grid" id="preset-sound-grid">
-            <button class="preset-chip active" data-sound="on">🔊 소리 켜기</button>
-            <button class="preset-chip" data-sound="off">🔇 무음</button>
+            <!-- 게이트 판단 시간 -->
+            <label class="preset-label">⏱️ 게이트 판단 시간</label>
+            <div class="preset-chip-grid" id="preset-gate-grid">
+              <button class="preset-chip active" data-gate="standard">표준 (0.65x)</button>
+              <button class="preset-chip" data-gate="relaxed">넉넉 (0.42x)</button>
+              <button class="preset-chip" data-gate="unlimited">무제한</button>
+            </div>
+
+            <!-- 동행 표시 (3성 목표 페이서) -->
+            <label class="preset-label">🐷 동행 표시</label>
+            <div class="preset-chip-grid" id="preset-companion-grid">
+              <button class="preset-chip active" data-companion="pacer">🎯 3성 목표 페이서</button>
+              <button class="preset-chip" data-companion="off">끔</button>
+            </div>
+
+            <!-- 사운드 모드 -->
+            <label class="preset-label">🔊 소리 모드</label>
+            <div class="preset-chip-grid" id="preset-sound-grid">
+              <button class="preset-chip active" data-sound="on">🔊 소리 켜기</button>
+              <button class="preset-chip" data-sound="off">🔇 무음</button>
+            </div>
           </div>
         </div>
 
