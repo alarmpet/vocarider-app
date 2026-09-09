@@ -17,9 +17,9 @@
     }
   }
   </script>
-  <script type="module" crossorigin src="./bundle/index-BIYXSYQI.js"></script>
+  <script type="module" crossorigin src="./bundle/index-CvYOglJq.js"></script>
   <link rel="modulepreload" crossorigin href="./bundle/three-DbOOk5Wd.js">
-  <link rel="stylesheet" crossorigin href="./bundle/index-i2GVriu-.css">
+  <link rel="stylesheet" crossorigin href="./bundle/index-BEkAW1_5.css">
 </head>
 <body>
   <div id="game-container">
@@ -301,6 +301,15 @@
           </div>
         </div>
 
+        <!-- 👆 플레이 방식 (TR-001, D-063) — **맨 위**다. 이 선택이 나머지 설정의 의미를 정한다:
+             곡선 코스 칸이 열리는지(터치 전용), 판단 시간이 무엇을 재는지가 여기서 갈린다.
+             폰 실측(375×812)에서 이 칸이 870px 자리라 첫 화면에 아예 안 보였다. -->
+        <div class="setup-section" id="play-mode-section">
+          <label class="section-title">👆 어떻게 답할까요?</label>
+          <div class="play-mode-grid play-mode-grid--lead" id="play-mode-grid"></div>
+          <p class="setup-hint">터치 레이스는 문제가 화면 카드로 뜨고 답을 탭합니다. 빨리 맞히면 더 가속(판단 시간 모드가 기준, 무제한은 등급 없음), 틀리면 감속. 기록은 게이트 레이스와 따로 비교합니다.</p>
+        </div>
+
         <!-- 함께 달릴 친구 — 보유 캐릭터에서만 (router 동적 생성. 새 친구는 상점) -->
         <div class="setup-section">
           <label class="section-title">🏄 함께 달릴 친구 <span style="font-weight:400;font-size:11px;color:#8aa0c8">— 새 친구는 🎁 상점에서</span></label>
@@ -308,8 +317,13 @@
         </div>
 
         <!-- Wordset Selection Section -->
-        <div class="setup-section" id="wordset-section">
-          <label class="section-title">📚 학습 단어장 선택</label>
+        <div class="setup-section wordset-collapsed" id="wordset-section">
+          <label class="section-title">📚 학습 단어장</label>
+          <!-- 목록은 507px 이라 접어 둔다 — 평소엔 고른 것만 한 줄로 보이고, 바꿀 때만 편다 -->
+          <button class="wordset-summary" id="wordset-summary" type="button" aria-expanded="false">
+            <span class="ws-summary-name" id="wordset-summary-name">그림 ↔ 뜻 교차 모드</span>
+            <span class="ws-summary-action">바꾸기</span>
+          </button>
           <div class="wordset-grid">
             <button class="wordset-btn active" data-wordset="hybrid">
               <span class="ws-icon">✨</span>
@@ -410,13 +424,6 @@
               <span class="length-desc">약 4,000m / 4분 마라톤</span>
             </button>
           </div>
-        </div>
-
-        <!-- 👆 플레이 방식 (TR-001, D-063) — 게이트 레이스 / 터치 레이스. 학습 데이터 공유, 기록 버킷은 분리 -->
-        <div class="setup-section">
-          <label class="section-title">👆 플레이 방식</label>
-          <div class="play-mode-grid" id="play-mode-grid"></div>
-          <p class="setup-hint">터치 레이스는 문제가 화면 카드로 뜨고 답을 탭합니다. 빨리 맞히면 더 가속(판단 시간 모드가 기준, 무제한은 등급 없음), 틀리면 감속. 기록은 게이트 레이스와 따로 비교합니다.</p>
         </div>
 
         <!-- 🛣️ 코스 (MAP-001) — 곡선 노선은 터치 레이스에서만. 게이트 레이스에서는 이 칸이 숨는다 -->
