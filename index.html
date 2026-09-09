@@ -17,7 +17,7 @@
     }
   }
   </script>
-  <script type="module" crossorigin src="./bundle/index-D_Vor4Lq.js"></script>
+  <script type="module" crossorigin src="./bundle/index-Bw2i1sLQ.js"></script>
   <link rel="modulepreload" crossorigin href="./bundle/three-DbOOk5Wd.js">
   <link rel="stylesheet" crossorigin href="./bundle/index-i2GVriu-.css">
 </head>
@@ -417,6 +417,13 @@
           <label class="section-title">👆 플레이 방식</label>
           <div class="play-mode-grid" id="play-mode-grid"></div>
           <p class="setup-hint">터치 레이스는 문제가 화면 카드로 뜨고 답을 탭합니다. 빨리 맞히면 더 가속(판단 시간 모드가 기준, 무제한은 등급 없음), 틀리면 감속. 기록은 게이트 레이스와 따로 비교합니다.</p>
+        </div>
+
+        <!-- 🛣️ 코스 (MAP-001) — 곡선 노선은 터치 레이스에서만. 게이트 레이스에서는 이 칸이 숨는다 -->
+        <div class="setup-section hidden" id="course-section">
+          <label class="section-title">🛣️ 코스</label>
+          <div class="speed-tier-grid" id="course-grid"></div>
+          <p class="setup-hint">굽은 코스는 터치 레이스 전용입니다. 코스를 고르면 문제 수와 거리가 그 코스에 맞춰집니다.</p>
         </div>
 
         <!-- 🐢 속도 4단계 · 판단 시간 (§08 E1·E2) — 네 단계 모두 처음부터 열려 있다 -->
