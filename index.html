@@ -17,9 +17,9 @@
     }
   }
   </script>
-  <script type="module" crossorigin src="./bundle/index-D83OAKGv.js"></script>
+  <script type="module" crossorigin src="./bundle/index-CdGsmyjI.js"></script>
   <link rel="modulepreload" crossorigin href="./bundle/three-DbOOk5Wd.js">
-  <link rel="stylesheet" crossorigin href="./bundle/index-B5mLkXFE.css">
+  <link rel="stylesheet" crossorigin href="./bundle/index-YvjsLJiC.css">
 </head>
 <body>
   <div id="game-container">
@@ -211,6 +211,13 @@
           <span class="map-stat" id="map-trophy-stat">🏆 0</span>
           <span class="map-stat" id="map-coin-stat">🪙 0</span>
           <button id="open-shop-start-btn" class="btn secondary-btn map-shop-btn">🎁 상점</button>
+        </div>
+
+        <!-- 🎮 스테이지 플레이 방식 — 월드맵 스테이지는 이 설정을 따른다(보스는 게이트 고정).
+             모험 화면에 표시·전환점이 없어 사용자가 찾지 못했다 (폰 보고 2026-09-10). 설정 화면과 같은 sled_play_mode 다. -->
+        <div class="map-playmode" id="map-playmode">
+          <span class="map-playmode-label">스테이지 플레이 방식</span>
+          <div class="map-playmode-seg" id="map-playmode-seg"></div>
         </div>
 
         <div class="world-map-viewport">
