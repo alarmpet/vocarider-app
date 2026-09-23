@@ -17,9 +17,9 @@
     }
   }
   </script>
-  <script type="module" crossorigin src="./bundle/index-ZI2BFHqC.js"></script>
+  <script type="module" crossorigin src="./bundle/index-BCtMrtc7.js"></script>
   <link rel="modulepreload" crossorigin href="./bundle/three-DX47kDu-.js">
-  <link rel="stylesheet" crossorigin href="./bundle/index-Dzp-wr07.css">
+  <link rel="stylesheet" crossorigin href="./bundle/index-DkeshMmX.css">
 </head>
 <body>
   <div id="game-container">
@@ -600,12 +600,20 @@
               <button class="preset-chip active" data-effects="lite">🪶 가볍게</button>
             </div>
             <p class="preset-hint">화면이 끊기면 <b>가볍게</b>를 골라 보세요. 눈에 잘 안 띄는 발광 효과만 빠지고 <b>주행·점수는 그대로</b>입니다.</p>
+
+            <!-- 📜 단어 출처·라이선스 (D-138) — 내용은 src/credits.js -->
+            <button id="my-credits-btn" class="btn secondary-btn my-credits-btn" type="button">📜 단어 출처·라이선스</button>
           </div>
         </div>
 
         <div class="my-footer-actions">
           <button id="my-save-play-btn" class="btn primary-btn">🚀 이 설정으로 지금 달리기</button>
         </div>
+      </div>
+      <!-- 🏠 차고 — "내 것들" 한자리 (계획서 2026-09-22-hub-garage §4 A). 내용은 src/collection/garage-view.js 가 만든다 -->
+      <div id="garage-pane" class="card setup-card garage-card hidden">
+        <div class="setup-title">🏠 내 차고</div>
+        <div id="garage-body"></div>
       </div>
 
       <!-- 하단 5대 내비게이션 바 (공통 셸) -->
@@ -626,11 +634,27 @@
           <span class="nav-icon">🛍️</span>
           <span class="nav-label">상점</span>
         </button>
+        <button class="nav-tab" data-tab="garage" id="nav-tab-garage">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-label">차고</span>
+        </button>
         <button class="nav-tab" data-tab="my" id="nav-tab-my">
           <span class="nav-icon">👤</span>
           <span class="nav-label">MY</span>
         </button>
       </nav>
+    </div>
+
+    <!-- 📜 단어 출처·라이선스 (D-138) — 목록은 src/credits.js 가 채운다 -->
+    <div id="credits-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="credits-title">
+      <div class="card modal-card credits-card">
+        <div class="modal-header">
+          <h2 id="credits-title">📜 단어 출처·라이선스</h2>
+          <button id="close-credits-btn" class="close-btn" aria-label="출처 창 닫기">✕</button>
+        </div>
+        <p class="modal-sub">VocaRider 의 단어와 뜻은 아래 공개 자료에서 가져왔습니다.</p>
+        <div id="credits-list" class="credits-list"></div>
+      </div>
     </div>
 
     <!-- 🎁 Skin & Vehicle Gacha Shop Modal -->
