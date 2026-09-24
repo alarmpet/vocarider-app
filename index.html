@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>VocaRider · 보카라이더 — 영단어 게이트 레이스</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏁</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏁</text></svg>">
 
   <!-- Three.js Post-Processing Pipeline -->
 
@@ -17,9 +17,9 @@
     }
   }
   </script>
-  <script type="module" crossorigin src="./bundle/index-CTENVcvA.js"></script>
-  <link rel="modulepreload" crossorigin href="./bundle/three-DX47kDu-.js">
-  <link rel="stylesheet" crossorigin href="./bundle/index-4CdOy0qf.css">
+  <script type="module" crossorigin src="./bundle/index-B9NaUJlQ.js"></script>
+  <link rel="modulepreload" crossorigin href="./bundle/three-BMXgTFNj.js">
+  <link rel="stylesheet" crossorigin href="./bundle/index-CrsFgd1C.css">
 </head>
 <body>
   <div id="game-container">
@@ -461,6 +461,12 @@
           </div>
           <p class="setup-hint">무음을 고르면 소리를 들어야 하는 문제가 나오지 않습니다. 지하철·도서관에서도 공평하게.</p>
 
+          <label class="section-title">📳 진동</label>
+          <div class="sound-mode-grid">
+            <button class="haptic-mode-btn" data-haptic="on">📳 진동 켜기<span class="sound-sub">정답·니트로 때 짧게</span></button>
+            <button class="haptic-mode-btn" data-haptic="off">🔕 진동 끄기<span class="sound-sub">진동 없이</span></button>
+          </div>
+
           <label class="section-title">🕹️ 조작 방식</label>
           <div class="sound-mode-grid">
             <button class="steer-mode-btn" data-steer="touch">🕹️ 터치 조이스틱<span class="sound-sub">화면을 누르면 스틱이 따라와요</span></button>
@@ -603,6 +609,10 @@
 
             <!-- 📜 단어 출처·라이선스 (D-138) — 내용은 src/credits.js -->
             <button id="my-credits-btn" class="btn secondary-btn my-credits-btn" type="button">📜 단어 출처·라이선스</button>
+            <!-- 👪 보호자 안내 (아스팔트 1단계 ④) — 내용은 src/guardian.js -->
+            <button id="my-guardian-btn" class="btn secondary-btn my-credits-btn" type="button">👪 보호자 안내</button>
+            <button id="my-tutorial-btn" class="btn secondary-btn my-credits-btn" type="button">🎓 튜토리얼 다시 보기</button>
+            <button id="my-nav-all-btn" class="btn secondary-btn my-credits-btn" type="button">🔓 탭 모두 열기</button>
           </div>
         </div>
 
@@ -657,7 +667,18 @@
       </div>
     </div>
 
-    <!-- 🎁 Skin & Vehicle Gacha Shop Modal -->
+    <!-- 👪 보호자 안내 — 결제·광고·뽑기·에너지 없음 · 기록은 이 기기에만 (src/guardian.js) -->
+    <div id="guardian-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="guardian-title">
+      <div class="card modal-card credits-card">
+        <div class="modal-header">
+          <h2 id="guardian-title">👪 보호자 안내</h2>
+          <button id="close-guardian-btn" class="close-btn" aria-label="보호자 안내 닫기">✕</button>
+        </div>
+        <div id="guardian-list" class="guardian-list"></div>
+      </div>
+    </div>
+
+    <!-- 🎁 Skin & Vehicle Shop Modal (정가 구매 — 확률형 뽑기 아님. 옛 이름에 Gacha 가 붙어 있었다) -->
     <div id="shop-modal" class="modal-overlay hidden">
       <div class="card modal-card">
         <div class="modal-header">
@@ -757,6 +778,8 @@
         </div>
         <!-- 🏁 Tour 결과 줄 · 📚 복습 추천 ≤3 (RT-002 5·6단계). 없으면 숨김 -->
         <p class="setup-hint v-tour-line hidden" id="v-tour-line"></p>
+        <p class="v-goal-line hidden" id="v-goal-line"></p>
+        <p class="v-next-unlock hidden" id="v-next-unlock"></p>
         <div class="victory-recs hidden" id="victory-review-recs"></div>
 
         <div class="victory-actions">
@@ -825,7 +848,7 @@
       console.error('[VocaRider 진단] unhandledrejection:', (r && r.stack) || r);
     });
   </script>
-
+
 </div><!-- /#game-container — 원래 닫히지 않아 브라우저가 암묵적으로 닫고 있었다 -->
 </body>
 </html>
