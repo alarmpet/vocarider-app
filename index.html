@@ -17,9 +17,9 @@
     }
   }
   </script>
-  <script type="module" crossorigin src="./bundle/index-gR07jCA_.js"></script>
+  <script type="module" crossorigin src="./bundle/index-Bwn8QqAS.js"></script>
   <link rel="modulepreload" crossorigin href="./bundle/three-P4n13O-o.js">
-  <link rel="stylesheet" crossorigin href="./bundle/index-DdexgF5q.css">
+  <link rel="stylesheet" crossorigin href="./bundle/index-BL8RpkRB.css">
 </head>
 <body>
   <div id="game-container">
@@ -525,11 +525,10 @@
         <div id="account-card" class="account-card hidden">
           <p id="account-status" class="preset-hint">☁️ 로그인하면 기록을 백업하고 다른 기기에서 이어할 수 있어요 (선택)</p>
           <button id="account-login-btn" class="btn secondary-btn my-credits-btn" type="button">🔑 구글로 로그인 (선택)</button>
+          <!-- 자동 저장(아스팔트·카트라이더처럼 버튼 없음 — 2026-10-02 사용자 "그런 게임에도 지금 백업 버튼이 있어?") · 드문 행동은 작은 링크 -->
           <div id="account-actions" class="account-actions hidden">
-            <button id="account-backup-btn" class="btn secondary-btn my-credits-btn" type="button">⬆️ 지금 백업</button>
-            <button id="account-restore-btn" class="btn secondary-btn my-credits-btn" type="button">⬇️ 클라우드에서 불러오기</button>
-            <button id="account-logout-btn" class="btn secondary-btn my-credits-btn" type="button">로그아웃</button>
-            <button id="account-delete-btn" class="btn secondary-btn my-credits-btn" type="button">🗑️ 계정 삭제</button>
+            <button id="account-logout-btn" class="account-link" type="button">로그아웃</button>
+            <button id="account-delete-btn" class="account-link danger" type="button">계정 삭제</button>
           </div>
         </div>
         <div class="my-subtab-bar" id="my-subtab-bar">
