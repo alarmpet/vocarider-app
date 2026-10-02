@@ -17,9 +17,9 @@
     }
   }
   </script>
-  <script type="module" crossorigin src="./bundle/index-tyKdr6WN.js"></script>
+  <script type="module" crossorigin src="./bundle/index-gR07jCA_.js"></script>
   <link rel="modulepreload" crossorigin href="./bundle/three-P4n13O-o.js">
-  <link rel="stylesheet" crossorigin href="./bundle/index-CCVt3Eeg.css">
+  <link rel="stylesheet" crossorigin href="./bundle/index-DdexgF5q.css">
 </head>
 <body>
   <div id="game-container">
@@ -170,7 +170,7 @@
             <div class="lobby-user-info">
               <span class="lobby-title-text">🏁 VocaRider</span>
               <span class="lobby-subtitle-text" id="lobby-active-summary">사막 월드 · 초등 영단어</span>
-              <span class="lobby-free-note free-note">광고 없음 · 계정 없음 · 오프라인</span>
+              <span class="lobby-free-note free-note">광고 없음 · 가입 없이 바로 · 오프라인</span>
             </div>
           </div>
           <div class="lobby-currency-bar">
@@ -520,6 +520,18 @@
         </div>
 
         <!-- 2. 세그먼트 서브탭 바 (캐릭터 / 탈것 / 프리셋) -->
+        <!-- ☁️ 선택형 구글 로그인·백업 (D-162) — 내용은 src/account/account.js · MY 맨 위(어느 탭에서도 보이게 · 2026-10-02 "구글로 로그인 안 보여")
+             공개 전엔 ?account=1 시험 스위치로만 보인다 -->
+        <div id="account-card" class="account-card hidden">
+          <p id="account-status" class="preset-hint">☁️ 로그인하면 기록을 백업하고 다른 기기에서 이어할 수 있어요 (선택)</p>
+          <button id="account-login-btn" class="btn secondary-btn my-credits-btn" type="button">🔑 구글로 로그인 (선택)</button>
+          <div id="account-actions" class="account-actions hidden">
+            <button id="account-backup-btn" class="btn secondary-btn my-credits-btn" type="button">⬆️ 지금 백업</button>
+            <button id="account-restore-btn" class="btn secondary-btn my-credits-btn" type="button">⬇️ 클라우드에서 불러오기</button>
+            <button id="account-logout-btn" class="btn secondary-btn my-credits-btn" type="button">로그아웃</button>
+            <button id="account-delete-btn" class="btn secondary-btn my-credits-btn" type="button">🗑️ 계정 삭제</button>
+          </div>
+        </div>
         <div class="my-subtab-bar" id="my-subtab-bar">
           <button class="my-subtab-btn active" data-subtab="chars" id="my-subtab-chars-btn">
             🏄 캐릭터 <span class="my-subtab-badge" id="my-subtab-char-count">13</span>
