@@ -10,8 +10,8 @@
  *  · 자동 강제 갱신(skipWaiting)·탭 가로채기(clients.claim) 없음. 새 앱 코드는 네트워크 HTML 로 도착하므로 새 서비스워커가 대기 중이어도 앱은 최신이다. 메시지 'skip-waiting' 으로만 수동 전환.
  *  · 저장·트림은 event.waitUntil 에 묶는다(워커가 응답 직후 종료돼도 끝까지).
  *  · 긴급 해제: `node tools/make-sw.mjs --kill` 이 만드는 sw.js(tombstone)를 배포하면 캐시를 지우고 **아무것도 가로채지 않는다**(등록 해제+재탐색은 재등록 루프를 만들어 쓰지 않는다). docs/runbooks/service-worker.md */
-const BUILD = 'b2f68c045259';
-const SHELL_FILES = ["index.html","bundle/index-BRaqc2--.css","bundle/index-BXh4El0c.js","bundle/three-P4n13O-o.js"];   // 설치 때 저장할 것(스코프 기준 상대 경로 · index.html · ./ · 핵심 번들)
+const BUILD = 'abb015231edc';
+const SHELL_FILES = ["index.html","bundle/index-BF2rhVOe.js","bundle/index-BRaqc2--.css","bundle/three-P4n13O-o.js"];   // 설치 때 저장할 것(스코프 기준 상대 경로 · index.html · ./ · 핵심 번들)
 const SHELL = 'vr-shell-' + BUILD;
 const RUNTIME = 'vr-run-' + BUILD;
 const RUNTIME_MAX = 400;
