@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VocaRider · 보카라이더 — 영단어 게이트 레이스</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏁</text></svg>">
 
@@ -17,9 +17,9 @@
     }
   }
   </script>
-  <script type="module" crossorigin src="./bundle/index-C_TsFNNy.js"></script>
+  <script type="module" crossorigin src="./bundle/index-B4fcf2Ak.js"></script>
   <link rel="modulepreload" crossorigin href="./bundle/three-P4n13O-o.js">
-  <link rel="stylesheet" crossorigin href="./bundle/index-C0UHwngL.css">
+  <link rel="stylesheet" crossorigin href="./bundle/index-SBzbD588.css">
 </head>
 <body>
   <div id="game-container">
@@ -54,6 +54,7 @@
         <div class="stat-box rank-box">
           <span class="stat-label">COINS</span>
           <span class="stat-value rank-highlight" id="coins-val" style="font-size: 20px;">🪙 0</span>
+          <span class="coins-bag" id="coins-bag" aria-live="off"></span>
         </div>
 
         <div class="stat-box tier-box" id="tier-box">
@@ -171,11 +172,14 @@
               <span class="lobby-title-text">🏁 VocaRider</span>
               <span class="lobby-subtitle-text" id="lobby-active-summary">사막 월드 · 초등 영단어</span>
               <span class="lobby-free-note free-note">광고 없음 · 가입 없이 바로 · 오프라인</span>
+              <!-- 💾 저장 상태 한 줄 (src/save-status.js · 2026-10-10) — 로그인 권유 없음 · 누르면 보호자 안내 -->
+              <button type="button" class="lobby-save-note" id="lobby-save-note" aria-label="저장 상태 — 누르면 보호자 안내"></button>
             </div>
           </div>
           <div class="lobby-currency-bar">
             <span class="lobby-stat-badge trophy-badge" id="lobby-trophy-badge">🏆 <b id="lobby-trophy-val">0</b></span>
             <span class="lobby-stat-badge coin-badge" id="lobby-coin-badge">🪙 <b id="lobby-coin-val">0</b></span>
+            <button type="button" class="lobby-stat-badge box-badge" id="lobby-box-badge" aria-label="오늘의 카드">🃏 <b id="lobby-box-val">카드</b></button>
           </div>
         </div>
 
@@ -186,11 +190,14 @@
 
         <!-- 우측 하단 1-Tap 즉시 주행 메가 액션 존 -->
         <div class="lobby-action-zone" id="lobby-action-zone">
-          <!-- 🎧 D-164 — 듣기 게이트는 이 판에서만. 소리를 크게 들을 수 있을 때 따로 -->
-          <button id="lobby-listen-run-btn" class="lobby-listen-run-btn" type="button" aria-label="듣기 레이스 시작">🎧 듣기 레이스</button>
+          <!-- 🎮 플레이 방식 고르기 — 게이트·터치·듣기(D-164)·기록만 (src/race/lobby-mode.js · 2026-10-08 사용자 "듣기 레이스만 덩그러니") -->
+          <div class="lobby-mode-box">
+            <div id="lobby-mode-seg" class="lobby-mode-seg" role="radiogroup" aria-label="플레이 방식"></div>
+            <p id="lobby-mode-hint" class="lobby-mode-hint"></p>
+          </div>
           <div class="lobby-preset-chip" id="lobby-preset-chip">
             <span class="chip-label">NEXT TRACK</span>
-            <span class="chip-val" id="lobby-preset-val">🏜️ 사막 월드 · 🎒 초등 150</span>
+            <span class="chip-val" id="lobby-preset-val">🏜️ 사막 월드 · 🎒 초등 영단어</span>
           </div>
           <button id="lobby-instant-start-btn" class="lobby-instant-start-btn" aria-label="레이스 시작">
             <span class="start-btn-glow"></span>
@@ -345,21 +352,21 @@
             <button class="wordset-btn" data-wordset="elementary">
               <span class="ws-icon">🎒</span>
               <div class="ws-info">
-                <span class="ws-name">초등 필수 영단어 150</span>
+                <span class="ws-name">초등 필수 영단어</span>
                 <span class="ws-desc">Dog, Water, School, Friend...</span>
               </div>
             </button>
             <button class="wordset-btn" data-wordset="middle">
               <span class="ws-icon">🏫</span>
               <div class="ws-info">
-                <span class="ws-name">중고등 / 수능 필수 200</span>
+                <span class="ws-name">중고등 / 수능 필수</span>
                 <span class="ws-desc">Accept, Achieve, Adapt...</span>
               </div>
             </button>
             <button class="wordset-btn" data-wordset="high">
               <span class="ws-icon">📚</span>
               <div class="ws-info">
-                <span class="ws-name">고등 심화 160</span>
+                <span class="ws-name">고등 심화</span>
                 <span class="ws-desc">Adversity, Plausible, Subtle...</span>
               </div>
             </button>
@@ -387,7 +394,7 @@
             <button class="wordset-btn" data-wordset="phrases">
               <span class="ws-icon">💬</span>
               <div class="ws-info">
-                <span class="ws-name">생활 회화 100</span>
+                <span class="ws-name">생활 회화</span>
                 <span class="ws-desc">How's it going? Long time no see...</span>
               </div>
             </button>
@@ -535,6 +542,9 @@
             <button id="account-delete-btn" class="account-link danger" type="button">계정 삭제</button>
           </div>
         </div>
+        <!-- 🚩 문제·기능 신고 (UX 보고서 계획 P1-1) — 어느 탭에서도 보이게 MY 맨 위 · 시트는 src/report/report-ui.js -->
+        <button id="my-report-btn" class="btn secondary-btn my-credits-btn my-report-btn" type="button">🛠 기능이 이상해요 · 의견 보내기</button>
+        <p class="trust-line" data-trust-line></p>
         <div class="my-subtab-bar" id="my-subtab-bar">
           <button class="my-subtab-btn active" data-subtab="chars" id="my-subtab-chars-btn">
             🏄 캐릭터 <span class="my-subtab-badge" id="my-subtab-char-count">13</span>
@@ -713,6 +723,7 @@
           <button id="close-shop-btn" class="close-btn" aria-label="상점 닫기">✕</button>
         </div>
         <p class="modal-sub">단어를 배워 코인을 모으고, 새 친구를 데려와 진화시키세요! 진행은 📖 도감에서.</p>
+        <p class="trust-line" data-trust-line></p>
 
         <div class="shop-tabs">
           <button class="shop-tab active" data-tab="skins">🎽 스킨</button>
@@ -768,6 +779,7 @@
           <h2 id="victory-title">STAGE CLEAR!</h2>
           <p class="modal-sub" id="victory-sub">5개 단어 챌린지를 멋지게 완주했습니다!</p>
         </div>
+        <div class="v-climax hidden" id="v-climax" aria-live="polite"></div>   <!-- 🏁 익힌 단어 3개 + 내 친구 (L1 · src/race/victory-climax.js) -->
 
         <!-- ⭐️⭐️⭐️ 3D Pixar Medal & Star Rating -->
         <div class="victory-medal-box">
@@ -839,6 +851,8 @@
           <span class="fail-icon">💔</span>
           <h2 id="fail-title">STAGE FAILED</h2>
           <p class="modal-sub" id="fail-sub">하트 3개를 모두 잃었습니다. 오답 없이 정답 게이트를 통과해 보세요!</p>
+          <!-- 🛡️ 신뢰(UX 보고서 계획 P0-4) — 판 안 하트는 듀오링고식 에너지가 아니다: 기다림·충전·결제 없이 바로 다시 -->
+          <p class="fail-free-note">⏱️ 기다림 없이 바로 다시 — 다음 판은 하트 3개로 시작해요 · 하루 횟수 제한 없음</p>
         </div>
 
         <div class="fail-stats-grid">
