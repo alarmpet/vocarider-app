@@ -17,9 +17,9 @@
     }
   }
   </script>
-  <script type="module" crossorigin src="./bundle/index-w2PtXqCZ.js"></script>
+  <script type="module" crossorigin src="./bundle/index-BKWIuMT0.js"></script>
   <link rel="modulepreload" crossorigin href="./bundle/three-P4n13O-o.js">
-  <link rel="stylesheet" crossorigin href="./bundle/index-DA2ssCEs.css">
+  <link rel="stylesheet" crossorigin href="./bundle/index-J_h_MNfT.css">
 </head>
 <body>
   <div id="game-container">
@@ -826,6 +826,21 @@
         </div>
         <!-- 🏁 Tour 결과 줄 · 📚 복습 추천 ≤3 (RT-002 5·6단계). 없으면 숨김 -->
         <p class="v-next-retrieval hidden" id="v-next-retrieval"></p>
+        <!-- 🧮 판 점수 = 기본 × 배수 (표시 전용 · 저장 안 함 · src/race/run-score-view.js). 순수 레이스·튜토리얼은 숨김 · D-200 주인공 줄 아래(사용자 2026-11-05) -->
+        <div class="rs-box hidden" id="v-run-score" aria-label="이번 판 점수">
+          <div class="rs-label">이번 판 점수</div>
+          <div class="rs-formula">
+            <span class="rs-chip" id="v-rs-base">0</span><span class="rs-op">×</span><span class="rs-mult" id="v-rs-mult">1.00</span><span class="rs-op">=</span>
+          </div>
+          <div class="rs-total" id="v-rs-total">0</div>
+          <div class="rs-bars" id="v-rs-bars"></div>
+          <div class="rs-legend">
+            <span><i class="rs-conf"></i>확신 ×2</span><span><i class="rs-ok"></i>정답</span><span><i class="rs-snack"></i>O/X 간식</span><span><i class="rs-fever"></i>니트로 ×1.5</span>
+          </div>
+          <div class="rs-best" id="v-rs-best"></div>
+          <div class="rs-cards hidden" id="v-rs-cards"></div>   <!-- 🃏 도전 판에서 고른 카드 (P2) -->
+
+        </div>
         <p class="setup-hint v-tour-line hidden" id="v-tour-line"></p>
         <p class="v-record-cond hidden" id="v-record-cond"></p>
         <p class="v-goal-line hidden" id="v-goal-line"></p>
