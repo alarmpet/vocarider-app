@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VocaRider · 보카라이더 — 영단어 게이트 레이스</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏁</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏁</text></svg>">
 
   <!-- Three.js Post-Processing Pipeline -->
 
@@ -17,9 +17,9 @@
     }
   }
   </script>
-  <script type="module" crossorigin src="./bundle/index-DwB47QZ1.js"></script>
+  <script type="module" crossorigin src="./bundle/index-w2PtXqCZ.js"></script>
   <link rel="modulepreload" crossorigin href="./bundle/three-P4n13O-o.js">
-  <link rel="stylesheet" crossorigin href="./bundle/index-BwVrrHbe.css">
+  <link rel="stylesheet" crossorigin href="./bundle/index-DA2ssCEs.css">
 </head>
 <body>
   <div id="game-container">
@@ -58,7 +58,7 @@
         </div>
 
         <div class="stat-box tier-box" id="tier-box">
-          <span class="stat-label">LEAGUE</span>
+          <span class="stat-label">TROPHY</span><!-- 값은 로컬 트로피 누적 티어(main.js updateTierBadge) — 경쟁 리그가 아니다(UPG-002 B4) -->
           <span class="stat-value tier-badge" id="tier-badge">🥉 BRONZE</span>
         </div>
 
@@ -158,6 +158,10 @@
         <div class="gyro-gauge-dot" id="gyro-gauge-dot"></div>
       </button>
     </div>
+
+    <!-- 💬 메뉴용 토스트 층 (UX-001 ①) — #floating-msg 는 #hud 안이라 메뉴가 열리면 0×0 이었다(style.css `:has(#overlay-screen:not(.hidden)) #hud`).
+         같은 큐(createFloatQueue)가 #hud 가 안 보일 때만 이쪽에 그린다 — pickFloatTarget · src/race/float-queue.js -->
+    <div id="menu-floating-msg" class="floating-msg menu-floating-msg" role="status" aria-live="polite"></div>
 
     <!-- Start & Setup Screen -->
     <div id="overlay-screen" class="overlay-screen">
@@ -508,7 +512,7 @@
         <div class="setup-head">
           <button id="my-to-lobby-btn" class="close-btn" title="로비로 돌아가기" aria-label="로비로 돌아가기">←</button>
           <div class="setup-head-text">
-            <h2>👤 내 정보 · MY 차고</h2>
+            <h2>👤 내 정보 · MY</h2>
             <p class="subtitle">보유 자산 관리 및 1-Tap 즉시 질주 기본값 설정</p>
           </div>
         </div>
@@ -543,7 +547,8 @@
           </div>
         </div>
         <!-- 🚩 문제·기능 신고 (UX 보고서 계획 P1-1) — 어느 탭에서도 보이게 MY 맨 위 · 시트는 src/report/report-ui.js -->
-        <button id="my-report-btn" class="btn secondary-btn my-credits-btn my-report-btn" type="button">🛠 기능이 이상해요 · 의견 보내기</button>
+        <button id="my-report-btn" class="btn secondary-btn my-credits-btn my-report-btn" type="button">🛠 의견 보내기 · 오류 신고 · 기능 건의</button>
+        <button id="my-age-btn" class="btn secondary-btn my-credits-btn my-report-btn hidden" type="button">🎂 태어난 해 다시 입력</button>
         <p class="trust-line" data-trust-line></p>
         <div class="my-subtab-bar" id="my-subtab-bar">
           <button class="my-subtab-btn active" data-subtab="chars" id="my-subtab-chars-btn">
@@ -658,7 +663,7 @@
       </div>
       <!-- 🏠 차고 — "내 것들" 한자리 (계획서 2026-09-22-hub-garage §4 A). 내용은 src/collection/garage-view.js 가 만든다 -->
       <div id="garage-pane" class="card setup-card garage-card hidden">
-        <div class="setup-title">🏠 내 차고</div>
+        <div class="setup-title">🏠 내 집</div>
         <div id="garage-body"></div>
       </div>
 
@@ -682,7 +687,7 @@
         </button>
         <button class="nav-tab" data-tab="garage" id="nav-tab-garage">
           <span class="nav-icon">🏠</span>
-          <span class="nav-label">차고</span>
+          <span class="nav-label">집</span>
         </button>
         <button class="nav-tab" data-tab="my" id="nav-tab-my">
           <span class="nav-icon">👤</span>
@@ -724,6 +729,11 @@
         </div>
         <p class="modal-sub">단어를 배워 코인을 모으고, 새 친구를 데려와 진화시키세요! 진행은 📖 도감에서.</p>
         <p class="trust-line" data-trust-line></p>
+
+        <!-- 🗓️ 이번 주 진열 (D-186) — router.js renderWeeklyShelf 가 채운다 -->
+        <div id="shop-drop-strip" class="shop-drop-strip hidden"></div>
+        <div id="shop-ad-trail-strip" class="shop-drop-strip hidden"></div>   <!-- 🎬 ADS-005 광고 리본(앱만) · src/ads/ad-trail-ui.js -->
+        <div id="shop-weekly-strip" class="shop-weekly-strip hidden"></div>
 
         <div class="shop-tabs">
           <button class="shop-tab active" data-tab="skins">🎽 스킨</button>
@@ -815,16 +825,28 @@
           </div>
         </div>
         <!-- 🏁 Tour 결과 줄 · 📚 복습 추천 ≤3 (RT-002 5·6단계). 없으면 숨김 -->
+        <p class="v-next-retrieval hidden" id="v-next-retrieval"></p>
         <p class="setup-hint v-tour-line hidden" id="v-tour-line"></p>
+        <p class="v-record-cond hidden" id="v-record-cond"></p>
         <p class="v-goal-line hidden" id="v-goal-line"></p>
+        <p class="v-pit-line hidden" id="v-pit-line"></p>
         <p class="v-next-unlock hidden" id="v-next-unlock"></p>
         <div class="victory-recs hidden" id="victory-review-recs"></div>
+        <!-- 🎯 세 판 계약(SHORTS-002 묶음 3 · F-3) — 추천 하나 · 받으면 최대 세 판 · 보상 0 · src/race/run-contract.js -->
+        <div class="v-contract hidden" id="v-contract"><p class="v-contract-line" id="v-contract-line"></p><button id="v-contract-btn" class="btn secondary-btn hidden" type="button"></button></div>
 
         <div class="victory-actions">
           <button id="victory-review-btn" class="btn secondary-btn hidden" style="background: rgba(56, 189, 248, 0.2); border-color: #38bdf8; color: #38bdf8; font-weight: 800;">🧠 오답 복습하고 3성 달성 (+50🪙)</button>
+          <!-- 🎬 보상형 광고(ADS-001 · ADS-002 하루 1회) — 앱 · 프리즈 상한 아래 · 오늘 아직 안 썼을 때만 보인다 · 다른 버튼과 같은 크기, 강조색 없음 · src/ads/ad-freeze-ui.js -->
+          <button id="victory-ad-freeze-btn" class="btn secondary-btn hidden" type="button">🎬 광고 보고 스트릭 프리즈 +1 (하루 1회)</button>
+          <!-- 🎬 ADS-003 — 이 판 XP 한 번 더(앱 · 하루 3회 · 코인·판 결과 불변) · src/ads/ad-xp-ui.js -->
+          <button id="victory-ad-xp-btn" class="btn secondary-btn hidden" type="button">🎬 광고 보고 경험치 2배 (하루 3회)</button>
           <!-- 🔗 시드 코드·완주 카드 공유 (D-160 V) — 투어 완주 + 공개 스위치일 때만 보인다 · 내용은 src/share/ -->
           <button id="v-share-btn" class="btn secondary-btn hidden" type="button">🔗 같은 코스 도전 보내기</button>
           <button id="victory-report-btn" class="btn secondary-btn">📋 결과 보기</button>
+        </div>
+        <!-- 🏁 하단 고정 줄(UX-001 ②) — 작은 화면에서도 스크롤 없이 보인다 · 카드의 마지막 자식이어야 한다(src/race/result-actions.js) -->
+        <div class="result-sticky-actions">
           <button id="victory-map-btn" class="btn secondary-btn">🗺️ 월드맵으로</button>
           <button id="victory-next-btn" class="btn primary-btn">다음 라운드 질주 🚀</button>
         </div>
@@ -872,6 +894,9 @@
 
         <div class="fail-actions">
           <button id="fail-report-btn" class="btn secondary-btn">📋 결과 보기</button>
+          <button id="fail-ad-xp-btn" class="btn secondary-btn hidden" type="button">🎬 광고 보고 경험치 2배 (하루 3회)</button>
+        </div>
+        <div class="result-sticky-actions">   <!-- 🏁 UX-001 ② 하단 고정 줄 -->
           <button id="fail-map-btn" class="btn secondary-btn">🗺️ 월드맵으로</button>
           <button id="fail-retry-btn" class="btn primary-btn fail-retry-btn">🔄 무료 즉시 재도전</button>
         </div>
@@ -890,7 +915,7 @@
       console.error('[VocaRider 진단] unhandledrejection:', (r && r.stack) || r);
     });
   </script>
-
+
 </div><!-- /#game-container — 원래 닫히지 않아 브라우저가 암묵적으로 닫고 있었다 -->
 </body>
 </html>
