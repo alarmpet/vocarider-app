@@ -17,9 +17,9 @@
     }
   }
   </script>
-  <script type="module" crossorigin src="./bundle/index-BKWIuMT0.js"></script>
+  <script type="module" crossorigin src="./bundle/index-Cle3aWZW.js"></script>
   <link rel="modulepreload" crossorigin href="./bundle/three-P4n13O-o.js">
-  <link rel="stylesheet" crossorigin href="./bundle/index-J_h_MNfT.css">
+  <link rel="stylesheet" crossorigin href="./bundle/index-B-4vpbKY.css">
 </head>
 <body>
   <div id="game-container">
@@ -194,20 +194,25 @@
 
         <!-- 우측 하단 1-Tap 즉시 주행 메가 액션 존 -->
         <div class="lobby-action-zone" id="lobby-action-zone">
-          <!-- 🎮 플레이 방식 고르기 — 게이트·터치·듣기(D-164)·기록만 (src/race/lobby-mode.js · 2026-10-08 사용자 "듣기 레이스만 덩그러니") -->
-          <div class="lobby-mode-box">
-            <div id="lobby-mode-seg" class="lobby-mode-seg" role="radiogroup" aria-label="플레이 방식"></div>
-            <p id="lobby-mode-hint" class="lobby-mode-hint"></p>
-          </div>
-          <div class="lobby-preset-chip" id="lobby-preset-chip">
-            <span class="chip-label">NEXT TRACK</span>
-            <span class="chip-val" id="lobby-preset-val">🏜️ 사막 월드 · 🎒 초등 영단어</span>
-          </div>
+          <!-- 🧱 탭 단순화 S1(2026-11-05 · tools/research/2026-11-05-tab-simplify/plan.md §3): 로비 첫 화면은 카드·오늘 줄·START 만.
+               플레이 방식 칩·도전 스위치(JS 삽입)·내 탈것/다음 트랙 카드(JS 이동)는 아래 "더보기" 안 — 마지막 선택은 그대로 기억된다 -->
           <button id="lobby-instant-start-btn" class="lobby-instant-start-btn" aria-label="레이스 시작">
             <span class="start-btn-glow"></span>
             <span class="start-btn-icon">🚀</span>
             <span class="start-btn-text">START RACE</span>
           </button>
+          <details id="lobby-more" class="lobby-more">
+            <summary class="lobby-more-summary">⚙️ 방식 · 탈것 · 더보기</summary>
+            <!-- 🎮 플레이 방식 고르기 — 게이트·터치·듣기(D-164)·기록만 (src/race/lobby-mode.js · 2026-10-08 사용자 "듣기 레이스만 덩그러니") -->
+            <div class="lobby-mode-box">
+              <div id="lobby-mode-seg" class="lobby-mode-seg" role="radiogroup" aria-label="플레이 방식"></div>
+              <p id="lobby-mode-hint" class="lobby-mode-hint"></p>
+            </div>
+            <div class="lobby-preset-chip" id="lobby-preset-chip">
+              <span class="chip-label">NEXT TRACK</span>
+              <span class="chip-val" id="lobby-preset-val">🏜️ 사막 월드 · 🎒 초등 영단어</span>
+            </div>
+          </details>
         </div>
       </div>
 
@@ -224,12 +229,12 @@
         <div class="map-status">
           <span class="map-stat" id="map-trophy-stat">🏆 0</span>
           <span class="map-stat" id="map-coin-stat">🪙 0</span>
-          <button id="open-shop-start-btn" class="btn secondary-btn map-shop-btn">🎁 상점</button>
+          <button id="open-shop-start-btn" class="btn secondary-btn map-shop-btn hidden">🎁 상점</button>   <!-- 🧱 S1: 상점 입구는 하단 탭 하나 -->
         </div>
 
         <!-- 🎮 스테이지 플레이 방식 — 월드맵 스테이지는 이 설정을 따른다(보스는 게이트 고정).
              모험 화면에 표시·전환점이 없어 사용자가 찾지 못했다 (폰 보고 2026-09-10). 설정 화면과 같은 sled_play_mode 다. -->
-        <div class="map-playmode" id="map-playmode">
+        <div class="map-playmode hidden" id="map-playmode">   <!-- 🧱 S1: 플레이 방식은 로비 "더보기" 한 곳 -->
           <span class="map-playmode-label">스테이지 플레이 방식</span>
           <div class="map-playmode-seg" id="map-playmode-seg"></div>
         </div>
@@ -275,7 +280,7 @@
            CONTENT_REGISTRY 로 채운다. 첫 실행은 이 화면부터 (콘텐츠 먼저) -->
       <div id="quickstart-pane" class="card setup-card hidden">
         <div class="setup-head">
-          <button id="quickstart-close-btn" class="close-btn" title="월드맵으로" aria-label="월드맵으로 돌아가기">←</button>
+          <button id="quickstart-close-btn" class="close-btn" title="로비로" aria-label="로비로 돌아가기">←</button>   <!-- 🧱 S4: 실제 도착지(로비)와 이름을 맞춤 -->
           <div class="setup-head-text">
             <h2>⚡ 무엇을 배울까요?</h2>
             <p class="subtitle">고르면 바로 달립니다 — 캐릭터·맵은 나중에 언제든</p>
@@ -315,7 +320,7 @@
 
       <div id="race-setup-pane" class="card setup-card hidden">
         <div class="setup-head">
-          <button id="back-to-map-btn" class="close-btn" title="월드맵으로" aria-label="월드맵으로 돌아가기">←</button>
+          <button id="back-to-map-btn" class="close-btn" title="이전 화면으로" aria-label="이전 화면으로 돌아가기">←</button>   <!-- 🧱 S4: 스테이지 목록 또는 월드맵으로 간다 -->
           <div class="setup-head-text">
             <h2 id="setup-world-name">월드</h2>
             <p class="subtitle" id="setup-world-record"></p>
@@ -531,6 +536,8 @@
             <div class="my-stat-chip">🪙 <span id="my-coin-display">0</span></div>
           </div>
         </div>
+        <!-- 🧱 S2(D-208): 옛 🏠 집 탭의 입구 — 탈것·캐릭터 장착·방 꾸미기·배지는 여기서 -->
+        <button type="button" id="my-room-btn" class="btn primary-btn my-room-btn">🏠 내 방 — 탈것·캐릭터·방 꾸미기·배지</button>
 
         <!-- 2. 세그먼트 서브탭 바 (캐릭터 / 탈것 / 프리셋) -->
         <!-- ☁️ 선택형 구글 로그인·백업 (D-162) — 내용은 src/account/account.js · MY 맨 위(어느 탭에서도 보이게 · 2026-10-02 "구글로 로그인 안 보여")
@@ -550,7 +557,8 @@
         <button id="my-report-btn" class="btn secondary-btn my-credits-btn my-report-btn" type="button">🛠 의견 보내기 · 오류 신고 · 기능 건의</button>
         <button id="my-age-btn" class="btn secondary-btn my-credits-btn my-report-btn hidden" type="button">🎂 태어난 해 다시 입력</button>
         <p class="trust-line" data-trust-line></p>
-        <div class="my-subtab-bar" id="my-subtab-bar">
+        <!-- 🧱 탭 단순화 후속(2026-11-05 · D-208): 장착은 내 방 한 곳 — MY 의 캐릭터·탈것 하위 탭은 숨기고 설정을 바로 보인다(로직·마크업은 남김) -->
+        <div class="my-subtab-bar hidden" id="my-subtab-bar">
           <button class="my-subtab-btn active" data-subtab="chars" id="my-subtab-chars-btn">
             🏄 캐릭터 <span class="my-subtab-badge" id="my-subtab-char-count">13</span>
           </button>
@@ -558,7 +566,7 @@
             🏎️ 탈것 <span class="my-subtab-badge" id="my-subtab-veh-count">12</span>
           </button>
           <button class="my-subtab-btn" data-subtab="presets" id="my-subtab-presets-btn">
-            ⚡ 프리셋
+            ⚙️ 설정
           </button>
         </div>
 
@@ -590,7 +598,7 @@
         <div class="my-subtab-pane hidden" id="my-subtab-pane-presets">
           <div class="my-section my-preset-section">
             <div class="my-section-head">
-              <span class="section-title">⚡ 기본 플레이 프리셋 (Default Preset)</span>
+              <span class="section-title">⚙️ 기본 플레이 설정</span>
               <span class="my-section-tag active-tag">1-Tap 맵 직행에 자동 적용</span>
             </div>
             <p class="setup-hint">원하는 속도와 과목, 수준을 미리 맞춰두면 맵 터치 한 번으로 즉시 질주합니다.</p>
@@ -663,11 +671,14 @@
       </div>
       <!-- 🏠 차고 — "내 것들" 한자리 (계획서 2026-09-22-hub-garage §4 A). 내용은 src/collection/garage-view.js 가 만든다 -->
       <div id="garage-pane" class="card setup-card garage-card hidden">
-        <div class="setup-title">🏠 내 집</div>
+        <div class="setup-head">
+          <button id="garage-to-my-btn" class="close-btn" title="내 정보로 돌아가기" aria-label="내 정보로 돌아가기">←</button>
+          <div class="setup-head-text"><div class="setup-title">🏠 내 방</div></div>
+        </div>
         <div id="garage-body"></div>
       </div>
 
-      <!-- 하단 5대 내비게이션 바 (공통 셸) -->
+      <!-- 하단 5탭 내비게이션 바 (공통 셸 · D-208) -->
       <nav class="bottom-nav-bar" id="bottom-nav-bar">
         <button class="nav-tab active" data-tab="lobby" id="nav-tab-lobby">
           <span class="nav-icon">🏎️</span>
@@ -685,10 +696,7 @@
           <span class="nav-icon">🛍️</span>
           <span class="nav-label">상점</span>
         </button>
-        <button class="nav-tab" data-tab="garage" id="nav-tab-garage">
-          <span class="nav-icon">🏠</span>
-          <span class="nav-label">집</span>
-        </button>
+        <!-- 🧱 탭 단순화 S2(2026-11-05 · D-208): 🏠 집 탭은 하단에서 뺐다 — 들어가는 길은 MY "🏠 내 방" · 로비 "내 탈것" 카드 -->
         <button class="nav-tab" data-tab="my" id="nav-tab-my">
           <span class="nav-icon">👤</span>
           <span class="nav-label">MY</span>
@@ -838,6 +846,7 @@
             <span><i class="rs-conf"></i>확신 ×2</span><span><i class="rs-ok"></i>정답</span><span><i class="rs-snack"></i>O/X 간식</span><span><i class="rs-fever"></i>니트로 ×1.5</span>
           </div>
           <div class="rs-best" id="v-rs-best"></div>
+          <div class="rs-rush hidden" id="v-rs-rush"></div>   <!-- 🎯 확신 질주 N/M 통과 (F-7 · 판 안 칸 · 저장 안 함) -->
           <div class="rs-cards hidden" id="v-rs-cards"></div>   <!-- 🃏 도전 판에서 고른 카드 (P2) -->
 
         </div>
@@ -858,7 +867,7 @@
           <button id="victory-ad-xp-btn" class="btn secondary-btn hidden" type="button">🎬 광고 보고 경험치 2배 (하루 3회)</button>
           <!-- 🔗 시드 코드·완주 카드 공유 (D-160 V) — 투어 완주 + 공개 스위치일 때만 보인다 · 내용은 src/share/ -->
           <button id="v-share-btn" class="btn secondary-btn hidden" type="button">🔗 같은 코스 도전 보내기</button>
-          <button id="victory-report-btn" class="btn secondary-btn">📋 결과 보기</button>
+          <button id="victory-report-btn" class="btn secondary-btn">📋 단어별로 보기</button>
         </div>
         <!-- 🏁 하단 고정 줄(UX-001 ②) — 작은 화면에서도 스크롤 없이 보인다 · 카드의 마지막 자식이어야 한다(src/race/result-actions.js) -->
         <div class="result-sticky-actions">
@@ -908,7 +917,7 @@
         </div>
 
         <div class="fail-actions">
-          <button id="fail-report-btn" class="btn secondary-btn">📋 결과 보기</button>
+          <button id="fail-report-btn" class="btn secondary-btn">📋 단어별로 보기</button>
           <button id="fail-ad-xp-btn" class="btn secondary-btn hidden" type="button">🎬 광고 보고 경험치 2배 (하루 3회)</button>
         </div>
         <div class="result-sticky-actions">   <!-- 🏁 UX-001 ② 하단 고정 줄 -->
