@@ -4,6 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VocaRider · 보카라이더 — 영단어 게이트 레이스</title>
+  <!-- 👋 링크 미리보기(INV-001) — 카톡·문자·메일에 그림 카드. 정적이어야 스크래퍼가 본다 · 이미지는 절대 주소 · 바꿀 땐 tools/og/make_og.py --version N 과 함께 -->
+  <meta name="description" content="단어 맞히며 달리는 영단어 레이싱 — 설치 없이 바로 한 판">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="VocaRider">
+  <meta property="og:title" content="VocaRider · 보카라이더 — 영단어 레이싱">
+  <meta property="og:description" content="단어 맞히며 달리는 영단어 레이싱 — 설치 없이 바로 한 판">
+  <meta property="og:url" content="https://alarmpet.github.io/vocarider-app/">
+  <meta property="og:image" content="https://alarmpet.github.io/vocarider-app/assets/og/vocarider-og-v1.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="ko_KR">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏁</text></svg>">
 
   <!-- Three.js Post-Processing Pipeline -->
@@ -17,9 +29,9 @@
     }
   }
   </script>
-  <script type="module" crossorigin src="./bundle/index-CjQZX-fN.js"></script>
+  <script type="module" crossorigin src="./bundle/index-BQsYWwiO.js"></script>
   <link rel="modulepreload" crossorigin href="./bundle/three-P4n13O-o.js">
-  <link rel="stylesheet" crossorigin href="./bundle/index-B-4vpbKY.css">
+  <link rel="stylesheet" crossorigin href="./bundle/index-DZp7reaF.css">
 </head>
 <body>
   <div id="game-container">
@@ -538,6 +550,8 @@
         </div>
         <!-- 🧱 S2(D-208): 옛 🏠 집 탭의 입구 — 탈것·캐릭터 장착·방 꾸미기·배지는 여기서 -->
         <button type="button" id="my-room-btn" class="btn primary-btn my-room-btn">🏠 내 방 — 탈것·캐릭터·방 꾸미기·배지</button>
+        <!-- 👋 친구 초대(INV-001) — 초대 단계표·진행도 · src/share/invite.js · invite-reward.js -->
+        <button type="button" id="my-invite-btn" class="btn secondary-btn my-invite-btn">👋 친구에게 알려 주기</button>
 
         <!-- 2. 세그먼트 서브탭 바 (캐릭터 / 탈것 / 프리셋) -->
         <!-- ☁️ 선택형 구글 로그인·백업 (D-162) — 내용은 src/account/account.js · MY 맨 위(어느 탭에서도 보이게 · 2026-10-02 "구글로 로그인 안 보여")
@@ -867,6 +881,8 @@
           <button id="victory-ad-xp-btn" class="btn secondary-btn hidden" type="button">🎬 광고 보고 경험치 2배 (하루 3회)</button>
           <!-- 🔗 시드 코드·완주 카드 공유 (D-160 V) — 투어 완주 + 공개 스위치일 때만 보인다 · 내용은 src/share/ -->
           <button id="v-share-btn" class="btn secondary-btn hidden" type="button">🔗 같은 코스 도전 보내기</button>
+          <!-- 👋 친구 초대(INV-001) — 시드 공유와 별개 · 모든 완주 판 · 자동 팝업 0 · src/share/invite.js -->
+          <button id="v-invite-btn" class="btn secondary-btn" type="button">👋 친구에게 알려 주기</button>
           <button id="victory-report-btn" class="btn secondary-btn">📋 단어별로 보기</button>
         </div>
         <!-- 🏁 하단 고정 줄(UX-001 ②) — 작은 화면에서도 스크롤 없이 보인다 · 카드의 마지막 자식이어야 한다(src/race/result-actions.js) -->
