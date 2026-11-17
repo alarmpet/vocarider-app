@@ -29,9 +29,9 @@
     }
   }
   </script>
-  <script type="module" crossorigin src="./bundle/index-DBADnZPV.js"></script>
+  <script type="module" crossorigin src="./bundle/index-BBInjO9E.js"></script>
   <link rel="modulepreload" crossorigin href="./bundle/three-P4n13O-o.js">
-  <link rel="stylesheet" crossorigin href="./bundle/index-Cjf3yWKr.css">
+  <link rel="stylesheet" crossorigin href="./bundle/index-Cn43l6eh.css">
 </head>
 <body>
   <div id="game-container">
@@ -808,12 +808,13 @@
       <div class="card modal-card victory-card">
         <div class="victory-header">
           <span class="victory-trophy-icon">🏆</span>
-          <h2 id="victory-title">STAGE CLEAR!</h2>
+          <h2 id="victory-title">완주했어요!</h2>
           <p class="modal-sub" id="victory-sub">5개 단어 챌린지를 멋지게 완주했습니다!</p>
         </div>
         <div class="v-climax hidden" id="v-climax" aria-live="polite"></div>   <!-- 🏁 익힌 단어 3개 + 내 친구 (L1 · src/race/victory-climax.js) -->
 
-        <!-- ⭐️⭐️⭐️ 3D Pixar Medal & Star Rating -->
+        <!-- ⭐️⭐️⭐️ 메달 + 별 한 줄 (UX-004 — 105px 메달·별 줄 두 덩이가 첫 화면 160px 를 먹었다) -->
+        <div class="v-medal-row">
         <div class="victory-medal-box">
           <img id="victory-medal-img" class="victory-medal-img" src="./bundle/medal_3_224-xuZQe4BR.png" alt="Victory Medal" loading="lazy" width="105" height="105">
         </div>
@@ -822,39 +823,43 @@
           <span class="star-icon" id="star-2">⭐️</span>
           <span class="star-icon" id="star-3">⭐️</span>
         </div>
+        </div>
 
-        <!-- Victory Stats -->
+        <!-- Victory Stats — 큰 2칸(학습 결과) + 보상 칩 한 줄(UX-004 · 값 id 그대로) -->
         <div class="victory-stats-grid">
           <div class="v-stat-item">
-            <span class="v-stat-label">정답률</span>
+            <span class="v-stat-label">맞힌 단어 / 푼 문제</span>
             <span class="v-stat-value" id="v-score-val">5 / 5</span>
           </div>
           <div class="v-stat-item">
             <span class="v-stat-label">완주 시간</span>
             <span class="v-stat-value" id="v-time-val">1분 12초</span>
           </div>
-          <div class="v-stat-item">
-            <span class="v-stat-label">획득 트로피</span>
-            <span class="v-stat-value highlight-trophy" id="v-trophy-val">+100 🏆</span>
-          </div>
-          <div class="v-stat-item">
-            <span class="v-stat-label">획득 코인</span>
-            <span class="v-stat-value highlight-coin" id="v-coin-val">+50 🪙</span>
-          </div>
-          <div class="v-stat-item">
-            <span class="v-stat-label">캐릭터 경험치</span>
-            <span class="v-stat-value" id="v-xp-val">—</span>
-          </div>
         </div>
         <!-- 🏁 Tour 결과 줄 · 📚 복습 추천 ≤3 (RT-002 5·6단계). 없으면 숨김 -->
         <p class="v-next-retrieval hidden" id="v-next-retrieval"></p>
+        <div class="v-reward-row">
+          <div class="v-stat-item v-reward-chip">
+            <span class="v-stat-label">트로피</span>
+            <span class="v-stat-value highlight-trophy" id="v-trophy-val">+100 🏆</span>
+          </div>
+          <div class="v-stat-item v-reward-chip">
+            <span class="v-stat-label">코인</span>
+            <span class="v-stat-value highlight-coin" id="v-coin-val">+50 🪙</span>
+          </div>
+          <div class="v-stat-item v-reward-chip">
+            <span class="v-stat-label">경험치</span>
+            <span class="v-stat-value" id="v-xp-val">—</span>
+          </div>
+        </div>
         <!-- 🧮 판 점수 = 기본 × 배수 (표시 전용 · 저장 안 함 · src/race/run-score-view.js). 순수 레이스·튜토리얼은 숨김 · D-200 주인공 줄 아래(사용자 2026-11-05) -->
         <div class="rs-box hidden" id="v-run-score" aria-label="이번 판 점수">
-          <div class="rs-label">이번 판 점수</div>
-          <div class="rs-formula">
-            <span class="rs-chip" id="v-rs-base">0</span><span class="rs-op">×</span><span class="rs-mult" id="v-rs-mult">1.00</span><span class="rs-op">=</span>
-          </div>
-          <div class="rs-total" id="v-rs-total">0</div>
+          <!-- UX-004 — 계산식 한 줄은 늘 보이고(사용자 2026-10-26 "판 점수 표시"), 막대·범례·최고·질주·카드만 접는다 · 판마다 닫힘(run-score-view.js) -->
+          <details class="rs-details">
+          <summary class="rs-summary"><span class="rs-label">🧮 이번 판 점수</span>
+          <span class="rs-formula">
+            <span class="rs-chip" id="v-rs-base">0</span><span class="rs-op">×</span><span class="rs-mult" id="v-rs-mult">1.00</span><span class="rs-op">=</span><span class="rs-total" id="v-rs-total">0</span>
+          </span></summary>
           <div class="rs-bars" id="v-rs-bars"></div>
           <div class="rs-legend">
             <span><i class="rs-conf"></i>확신 ×2</span><span><i class="rs-ok"></i>정답</span><span><i class="rs-snack"></i>O/X 간식</span><span><i class="rs-fever"></i>니트로 ×1.5</span>
@@ -862,12 +867,13 @@
           <div class="rs-best" id="v-rs-best"></div>
           <div class="rs-rush hidden" id="v-rs-rush"></div>   <!-- 🎯 확신 질주 N/M 통과 (F-7 · 판 안 칸 · 저장 안 함) -->
           <div class="rs-cards hidden" id="v-rs-cards"></div>   <!-- 🃏 도전 판에서 고른 카드 (P2) -->
-
+          </details>
         </div>
         <p class="setup-hint v-tour-line hidden" id="v-tour-line"></p>
         <p class="v-record-cond hidden" id="v-record-cond"></p>
         <p class="v-goal-line hidden" id="v-goal-line"></p>
         <p class="v-pit-line hidden" id="v-pit-line"></p>
+        <p class="v-revive-line hidden" id="v-revive-line"></p>
         <p class="v-next-unlock hidden" id="v-next-unlock"></p>
         <div class="victory-recs hidden" id="victory-review-recs"></div>
         <!-- 🎯 세 판 계약(SHORTS-002 묶음 3 · F-3) — 추천 하나 · 받으면 최대 세 판 · 보상 0 · src/race/run-contract.js -->
@@ -879,11 +885,14 @@
           <button id="victory-ad-freeze-btn" class="btn secondary-btn hidden" type="button">🎬 광고 보고 스트릭 프리즈 +1 (하루 1회)</button>
           <!-- 🎬 ADS-003 — 이 판 XP 한 번 더(앱 · 하루 3회 · 코인·판 결과 불변) · src/ads/ad-xp-ui.js -->
           <button id="victory-ad-xp-btn" class="btn secondary-btn hidden" type="button">🎬 광고 보고 경험치 2배 (하루 3회)</button>
+          <!-- 🧩 보조 행동 한 줄(UX-004) — 공유·초대·단어별 보기만. 노출 조건·문구 그대로 · 광고 버튼은 이 줄에 넣지 않는다(D-190 · 같은 크기 계약) -->
+          <div class="v-sub-actions">
           <!-- 🔗 시드 코드·완주 카드 공유 (D-160 V) — 투어 완주 + 공개 스위치일 때만 보인다 · 내용은 src/share/ -->
           <button id="v-share-btn" class="btn secondary-btn hidden" type="button">🔗 같은 코스 도전 보내기</button>
           <!-- 👋 친구 초대(INV-001) — 시드 공유와 별개 · 모든 완주 판 · 자동 팝업 0 · src/share/invite.js -->
           <button id="v-invite-btn" class="btn secondary-btn" type="button">👋 친구에게 알려 주기</button>
           <button id="victory-report-btn" class="btn secondary-btn">📋 단어별로 보기</button>
+          </div>
         </div>
         <!-- 🏁 하단 고정 줄(UX-001 ②) — 작은 화면에서도 스크롤 없이 보인다 · 카드의 마지막 자식이어야 한다(src/race/result-actions.js) -->
         <div class="result-sticky-actions">
@@ -911,15 +920,15 @@
       <div class="card modal-card fail-card">
         <div class="fail-header">
           <span class="fail-icon">💔</span>
-          <h2 id="fail-title">STAGE FAILED</h2>
-          <p class="modal-sub" id="fail-sub">하트 3개를 모두 잃었습니다. 오답 없이 정답 게이트를 통과해 보세요!</p>
+          <h2 id="fail-title">하트가 모두 줄었어요</h2>   <!-- 🏁 UX-003 D — 영어 STAGE FAILED 대신 무슨 일이 있었는지 -->
+          <p class="modal-sub" id="fail-sub">틀린 단어를 확인하고 바로 다시 달려 봐요</p>
           <!-- 🛡️ 신뢰(UX 보고서 계획 P0-4) — 판 안 하트는 듀오링고식 에너지가 아니다: 기다림·충전·결제 없이 바로 다시 -->
           <p class="fail-free-note">⏱️ 기다림 없이 바로 다시 — 다음 판은 하트 3개로 시작해요 · 하루 횟수 제한 없음</p>
         </div>
 
         <div class="fail-stats-grid">
           <div class="fail-stat-item">
-            <span class="fail-stat-label">맞힌 문제 수</span>
+            <span class="fail-stat-label">맞힌 단어 / 푼 문제</span>
             <span class="fail-stat-value" id="fail-score-val">0 / 10</span>
           </div>
           <div class="fail-stat-item">
