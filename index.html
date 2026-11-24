@@ -29,9 +29,9 @@
     }
   }
   </script>
-  <script type="module" crossorigin src="./bundle/index-C81gCTc5.js"></script>
+  <script type="module" crossorigin src="./bundle/index-hRq0uTDc.js"></script>
   <link rel="modulepreload" crossorigin href="./bundle/three-P4n13O-o.js">
-  <link rel="stylesheet" crossorigin href="./bundle/index-BmfMhytC.css">
+  <link rel="stylesheet" crossorigin href="./bundle/index-BEa9pAyx.css">
 </head>
 <body>
   <div id="game-container">
@@ -941,13 +941,15 @@
           </div>
         </div>
 
+        <p class="fail-unlock-note hidden" id="fail-unlock-note"></p>   <!-- 🛍️ 첫 판이 탈락이면 상점 열림 안내는 여기에(떠다니는 축하 대신 · Q2 2026-11-24) -->
+
         <div class="fail-actions">
           <button id="fail-report-btn" class="btn secondary-btn">📋 단어별로 보기</button>
           <button id="fail-ad-xp-btn" class="btn secondary-btn hidden" type="button">🎬 광고 보고 경험치 2배 (하루 3회)</button>
         </div>
         <div class="result-sticky-actions">   <!-- 🏁 UX-001 ② 하단 고정 줄 -->
           <button id="fail-map-btn" class="btn secondary-btn">🗺️ 월드맵으로</button>
-          <button id="fail-retry-btn" class="btn primary-btn fail-retry-btn">🔄 무료 즉시 재도전</button>
+          <button id="fail-retry-btn" class="btn primary-btn fail-retry-btn" data-autofocus>🔄 무료 즉시 재도전</button>
         </div>
       </div>
     </div>
